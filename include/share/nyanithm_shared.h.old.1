@@ -1,0 +1,81 @@
+#ifndef __NYANITHM_SHARED_H__
+#define __NYANITHM_SHARED_H__
+
+#ifdef PICO_SDK_VERSION_MAJOR
+#include <stdint-gcc.h>
+#else
+#include <stdint.h>
+#endif
+
+#define CONTROLLER_CONFIG_MAGIC 0x88
+#define CONTROLLER_CONFIG_VERSION 0x01
+#define CONTROLLER_HARDWARE_VERSION 0x01
+
+struct mpr121Thresholds {
+    uint8_t touch[12];
+    uint8_t release[12];
+};
+
+
+const uint8_t CFG0_BIT_FORCE16LEDS = 0b00000001;
+const uint8_t CFG0_BIT_MBR3116 = 0b00000010;
+const uint8_t CFG1_BIT_ENABLE_SLIDER_INPUT_AS_KEYBOARD = 0b00000001;
+
+struct controller_config {
+    uint8_t magic;            // 此值必须为 CONTROLLER_CONFIG_MAGIC
+    uint8_t cfgVer;           // 配置文件版本
+    uint8_t hwVer;            // 硬件版本
+    uint8_t cfg0;             // b0: force 16 leds; b1: using cy8cmbr3116 instead of mpr121
+    uint8_t cfg1;             // b0: enable silder input as keyboard;
+    uint8_t cfg2;             //
+    uint8_t cfg3;             //
+    uint16_t airMax;          // air判定上限
+    uint16_t airMin;          // air判定下限
+    mpr121Thresholds mpr[3];  // mpr模块阈值
+    uint16_t mprFilter[3];    // mpr模块屏蔽区
+    int16_t heightOffset[4];  // 高度偏移值
+    uint8_t mprDebounce;      // 低4位dt, 高4位dr, 有效值3位
+    uint8_t reserved[28];     //
+    uint8_t xorSum;           // 前127字节异或和, 用于校验
+};
+
+extern controller_config defaultConfig;
+
+#define THRE_TOUCH_DEF 4    // default touch threshold value
+#define THRE_RELEASE_DEF 5  // default release threshold value
+
+const mpr121Thresholds defaultThresholds = {
+    {
+        //
+        THRE_TOUCH_DEF, THRE_TOUCH_DEF, THRE_TOUCH_DEF,  //
+        THRE_TOUCH_DEF, THRE_TOUCH_DEF, THRE_TOUCH_DEF,  //
+        THRE_TOUCH_DEF, THRE_TOUCH_DEF, THRE_TOUCH_DEF,  //
+        THRE_TOUCH_DEF, THRE_TOUCH_DEF, THRE_TOUCH_DEF   //
+    },                                                   //
+    {
+        //
+        THRE_RELEASE_DEF, THRE_RELEASE_DEF, THRE_RELEASE_DEF,  //
+        THRE_RELEASE_DEF, THRE_RELEASE_DEF, THRE_RELEASE_DEF,  //
+        THRE_RELEASE_DEF, THRE_RELEASE_DEF, THRE_RELEASE_DEF,  //
+        THRE_RELEASE_DEF, THRE_RELEASE_DEF, THRE_RELEASE_DEF   //
+    }  //
+};
+
+enum controller_command {
+    CMD_CFG_READ = 0xA0,
+    CMD_CFG_SAVE,
+    CMD_CFG_ERASE,
+    CMD_CFG_SET,
+    CMD_MSR_HEIGHT,
+    CMD_MSR_TOUCH,
+    CMD_MSR_TIME,
+    CMD_DEV_INIT,
+    CMD_HID_STOP,
+    CMD_HID_START,
+    CMD_GET_STATUS,
+    CMD_LOCATE_DEVICE,
+    CMD_TEST_LED,
+    CMD_EXIT
+};
+
+#endif

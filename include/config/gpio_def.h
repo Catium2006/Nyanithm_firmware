@@ -11,7 +11,8 @@
 
 #define GPIO_TOF_RESET 5
 
-#define GPIO_RGB 15
+#define GPIO_LED_CONTROLLER 15
+#define GPIO_LED_INTERNAL 16
 
 #define GPIO_BUTTON_UP 1
 #define GPIO_BUTTON_DOWN 3

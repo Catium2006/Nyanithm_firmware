@@ -15,6 +15,7 @@ int main() {
          
 
     sleep_ms(10);
+    
     boot_switch();
 
 }

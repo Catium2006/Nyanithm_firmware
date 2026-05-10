@@ -62,9 +62,9 @@ void update_rainbow_frame() {
         for (int i = 0; i < 31; i++) {
             uint8_t hue = (i * 256 / 31 + offset) & 0xFF;  // 0-255 循环
             RGB rgb = hsv_to_rgb(hue);
-            RGB_LED.setPixelColor(i, WS2812::RGB((rgb.r * ControllerConfig.lightLimit) / 255, (rgb.g * ControllerConfig.lightLimit) / 255, (rgb.b * ControllerConfig.lightLimit) / 255));
+            led_controller.setPixelColor(i, WS2812::RGB((rgb.r * ControllerConfig.lightLimit) / 255, (rgb.g * ControllerConfig.lightLimit) / 255, (rgb.b * ControllerConfig.lightLimit) / 255));
         }
-        RGB_LED.show();
+        led_controller.show();
 
         offset++;  // 改变偏移量，形成流动
     } else {

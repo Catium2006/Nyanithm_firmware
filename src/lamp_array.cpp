@@ -72,6 +72,9 @@ void lamp_array_apply(void) {
     if (game_connected) {
         return;
     }
+    if(!(ControllerConfig.cfg0 & CFG0_BIT_ENABLE_LAMPARRAY)){
+        return;
+    }
     if (!s_dirty) {
         return;
     }
@@ -95,9 +98,9 @@ void lamp_array_apply(void) {
         }
 
         // Keep physical LED indexing consistent with existing firmware mapping.
-        RGB_LED.setPixelColor(30 - i, WS2812::RGB(r, g, b));
+        led_controller.setPixelColor(30 - i, WS2812::RGB(r, g, b));
     }
-    RGB_LED.show();
+    led_controller.show();
     s_dirty = false;
 }
 

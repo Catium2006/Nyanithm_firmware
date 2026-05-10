@@ -1,4 +1,4 @@
-#include <stdint-gcc.h>
+#include <stdint.h>
 extern uint8_t cy8cmbr3116_cfg_0x37[128] ;
 
 extern uint8_t cy8cmbr3116_cfg_0x40[128] ;

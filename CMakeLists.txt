@@ -37,7 +37,6 @@ pico_sdk_init()
 # Add executable. Default name is the project name, version 0.1
 add_executable(Nyanithm 
         src/Nyanithm.cpp
-        src/mpr121.cpp
         src/pca954x.cpp
         src/usb_device.cpp
         src/usb_descriptors.c
@@ -46,17 +45,12 @@ add_executable(Nyanithm
         src/controller_config.cpp
         src/hw_devices.cpp
         src/chuni_io.cpp
-        src/app_link.cpp
         src/boot_mode.cpp
-        src/button.cpp
         src/cy8cmbr3116.cpp
-        src/hw_check.cpp
-        src/error_state.cpp
         src/rainbow.cpp
         src/other_modes.cpp
         src/tca9539.cpp
         src/lamp_array.cpp
-        src/production_mode.cpp
         lib/Pico_WS2812-master/WS2812.cpp
         )
 
@@ -65,7 +59,7 @@ pico_generate_pio_header(Nyanithm ${CMAKE_CURRENT_LIST_DIR}/lib/Pico_WS2812-mast
 
 pico_set_program_name(Nyanithm "Nyanithm")
 
-pico_set_program_version(Nyanithm "1.0")
+pico_set_program_version(Nyanithm "2.0")
 
 # Modify the below lines to enable/disable output over UART/USB
 pico_enable_stdio_uart(Nyanithm 0)

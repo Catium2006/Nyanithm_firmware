@@ -16,8 +16,8 @@ controller_config defaultConfig{
     .cfg2 = 0x00,                        //
     .cfg3 = 0x00,                        //
     .controller_mode = MODE_NORMAL,      //
-    .airMax = 500,                       //
-    .airMin = 200,                       //
+    .airMax = 400,                       //
+    .airMin = 50,                        //
     .heightOffset = {0, 0, 0, 0},        //
     .lightLimit = 255,                   //
     .xorSum = 0,                         // 前127字节异或和

@@ -64,7 +64,8 @@ void readConfigSafe(void* param) {
     for(int page = 0; page < 16; page++) {
         controller_config* config = (controller_config*)addr;
         // 检查是否为存储的配置
-        if(config->magic == CONTROLLER_CONFIG_MAGIC) {
+        if(config->magic == CONTROLLER_CONFIG_MAGIC &&
+           config->cfgVer == CONTROLLER_CONFIG_VERSION) {
             found = true;
             target = addr;
             currentPage = page;

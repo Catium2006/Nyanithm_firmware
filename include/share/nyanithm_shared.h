@@ -11,7 +11,6 @@
 #define CONTROLLER_CONFIG_VERSION 0x03
 #define NYANITHM_API_LEVEL 0x11
 
-
 const uint8_t CFG0_BIT_FORCE16LEDS = 0b00000001;
 const uint8_t CFG0_BIT_DARKER_GAP = 0b00000010;
 const uint8_t CFG0_BIT_ENABLE_LAMPARRAY = 0b00000100;
@@ -27,20 +26,21 @@ const uint8_t CFG1_BIT_ENABLE_AIR_INPUT_AS_KEYBOARD = 0b00000010;
 #define MODE_6K 2
 
 struct controller_config {
-    uint8_t magic;            // 此值必须为 CONTROLLER_CONFIG_MAGIC
-    uint8_t cfgVer;           // 配置文件版本
-    uint8_t hwVer;            // 硬件版本
-    uint8_t cfg0;             // b0: 强制使用16灯模式; b1: 降低非判定区域灯光亮度; b2: 启用动态照明; b3: 启用触摸光效反馈
-    uint8_t cfg1;             // b0: 启用触摸板键盘输入; b1: 启用Air键盘输入
-    uint8_t cfg2;             //
-    uint8_t cfg3;             //
-    uint8_t controller_mode;  // 
-    uint16_t airMax;          // air判定上限
-    uint16_t airMin;          // air判定下限
-    int16_t heightOffset[5];  // 高度偏移值
-    uint8_t lightLimit;
-    uint8_t reserved[104];  //
-    uint8_t xorSum;         // 前127字节异或和, 用于校验
+    uint8_t magic;  // 此值必须为 CONTROLLER_CONFIG_MAGIC
+    uint8_t cfgVer; // 配置文件版本
+    uint8_t hwVer;  // 硬件版本
+    uint8_t
+        cfg0; // b0: 强制使用16灯模式; b1: 降低非判定区域灯光亮度; b2: 启用动态照明; b3: 启用触摸光效反馈
+    uint8_t cfg1;            // b0: 启用触摸板键盘输入; b1: 启用Air键盘输入
+    uint8_t cfg2;            //
+    uint8_t cfg3;            //
+    uint8_t controller_mode; //
+    uint16_t airMax;         // air判定上限
+    uint16_t airMin;         // air判定下限
+    int16_t heightOffset[5]; // 高度偏移值
+    uint8_t lightLimit;      //
+    uint8_t reserved[104];   //
+    uint8_t xorSum;          // 前127字节异或和, 用于校验
 };
 
 extern controller_config defaultConfig;

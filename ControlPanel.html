@@ -1,21 +1,95 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
-    <title>ControlPlane</title>
+    <title>ControlPlane - 手台控制面板</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    body {
+        background-color: #12141d;
+        color: #ffffff;
+        padding: 2rem;
+        font-size: 15px;
+    }
+    .card {
+        background-color: #1a1e2b;
+        border: 1px solid #33394f;
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+    }
+    .card-header {
+        background-color: #23283b;
+        border-bottom: 1px solid #33394f;
+        font-weight: 700;
+        font-size: 16px;
+        color: #ffffff;
+    }
+    .div_touch_channel {
+        width: 36px;
+        height: 80px;
+        border: 2px solid #555b78;
+        text-align: center;
+        align-content: center;
+        display: inline-block;
+        font-size: 17px;
+        font-weight: bold;
+        color: #ffffff !important;
+        margin: 2px;
+        border-radius: 4px;
+        background: #202535;
+    }
+    .div_air {
+        width: 36px;
+        height: 36px;
+        border: 2px solid #555b78;
+        display: inline-block;
+        margin: 4px;
+        border-radius: 6px;
+        background: #202535;
+    }
+    input[type="range"] {
+        accent-color: #3b82f6;
+    }
+    .btn {
+        border-radius: 6px;
+        font-weight: 500;
+    }
+    #tip {
+        color: #58d8ff;
+        font-weight: 600;
+        font-size: 16px;
+    }
+    label, .form-check-label, .form-select {
+        color: #ffffff !important;
+        font-weight: 500;
+    }
+    .form-select, .form-check-input {
+        background-color: #23283b;
+        border-color: #444b66;
+        color: #fff;
+    }
+</style>
 </head>
-
 <body>
-    <button id="connectBtn">连接串口</button>
-    <div id="tip"></div>
-    <button onclick="startGetInput()">开始测试输入</button>
-    <button onclick="stopGetInput()">停止测试输入</button>
-
-    <div>
-
-        <div>
-            <div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">手台链接</div>
+        <div class="card-body">
+            <button id="connectBtn" class="btn btn-primary me-2">连接串口</button>
+            <span id="tip" class="ms-3"></span>
+            <div class="mt-3">
+                <button onclick="startGetInput()" class="btn btn-success me-2">开始测试输入</button>
+                <button onclick="stopGetInput()" class="btn btn-warning me-2">停止测试输入</button>
+                <button onclick="flashFirmware()" class="btn btn-danger me-2">烧录固件</button>
+                <button onclick="readConfig()" class="btn btn-info me-2">读取配置</button>
+                <button onclick="setAndSaveConfig()" class="btn btn-secondary">应用设置</button>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">触摸测试</div>
+        <div class="card-body">
+            <div class="mb-2">
                 <div class="div_touch_channel" id="tc31"></div>
                 <div class="div_touch_channel" id="tc29"></div>
                 <div class="div_touch_channel" id="tc27"></div>
@@ -33,7 +107,6 @@
                 <div class="div_touch_channel" id="tc3"></div>
                 <div class="div_touch_channel" id="tc1"></div>
             </div>
-
             <div>
                 <div class="div_touch_channel" id="tc32"></div>
                 <div class="div_touch_channel" id="tc30"></div>
@@ -53,45 +126,60 @@
                 <div class="div_touch_channel" id="tc2"></div>
             </div>
         </div>
-
-        <div class="div_air" id="air1"></div>
-        <div class="div_air" id="air2"></div>
-        <div class="div_air" id="air3"></div>
-        <div class="div_air" id="air4"></div>
-        <div class="div_air" id="air5"></div>
-        <div class="div_air" id="air6"></div>
-
     </div>
-    <button onclick="flashFirmware()">烧录固件</button>
-    <button onclick="readConfig()">读取配置</button>
-    <button onclick="setAndSaveConfig()">应用设置</button>
-    <button onclick="eraseConfig()">擦除配置</button>
-
-    <div>
-
-        <select id="hw_type">
-            <option value="3">27寸v2</option>
-            <option value="4">32寸v2</option>
-        </select>
-        <label>硬件种类</label>
-
+    <div class="card">
+        <div class="card-header">AIR 感应区域</div>
+        <div class="card-body">
+            <div class="div_air" id="air1"></div>
+            <div class="div_air" id="air2"></div>
+            <div class="div_air" id="air3"></div>
+            <div class="div_air" id="air4"></div>
+            <div class="div_air" id="air5"></div>
+            <div class="div_air" id="air6"></div>
+        </div>
     </div>
-
-    <div>
-        <input type="checkbox" id="cb1"><label>降低缝隙亮度</label>
-        <input type="checkbox" id="cb2"><label>启用Windows动态照明</label>
-        <input type="checkbox" id="cb3"><label>启用触摸键盘输入</label>
-        <input type="checkbox" id="cb4"><label>启用Air键盘输入</label>
-
+    <div class="card">
+        <div class="card-header">参数配置</div>
+        <div class="card-body">
+            <div class="mb-3">
+                <label class="form-label">硬件种类</label>
+                <select id="hw_type" class="form-select w-auto">
+                    <option value="3">27寸v2</option>
+                    <option value="4">32寸v2</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="cb1" class="form-check-input">
+                    <label for="cb1" class="form-check-label">降低缝隙亮度</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="cb2" class="form-check-input">
+                    <label for="cb2" class="form-check-label">启用Windows动态照明</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="cb3" class="form-check-input">
+                    <label for="cb3" class="form-check-label">启用触摸键盘输入</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" id="cb4" class="form-check-input">
+                    <label for="cb4" class="form-check-label">启用Air键盘输入</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="d-flex align-items-center mb-2">
+                    <input type="range" id="rg1" min="50" max="250" step="5" class="w-50 me-3">
+                    <label>Air判定低点</label>
+                </div>
+                <div class="d-flex align-items-center">
+                    <input type="range" id="rg2" min="250" max="800" step="10" class="w-50 me-3">
+                    <label>Air判定高点</label>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <input type="range" id="rg1" min="50" max="250" step="5"><label>Air判定低点</label>
-        <input type="range" id="rg2" min="250" max="800" step="10"><label>Air判定高点</label>
-
-    </div>
-
-    <script>
-
+</div>
+<script>
         const NYANITHM_API_LEVEL = 0x11;
         const CONTROLLER_CONFIG_MAGIC = 0x88;
         const CONTROLLER_CONFIG_VERSION = 0x03;
@@ -153,7 +241,7 @@
             sendQueue.push(new Uint8Array([0xB0]));
             setTimeout(function () {
                 while (recvQueue.length > 0) {
-                    let data = recvQueue.shift(); // 拿到 Uint8Array
+                    let data = recvQueue.shift();
                     if (data[0] == 0xB0) {
                         controllerReady = true;
                         console.log("连接到手台");
@@ -174,7 +262,7 @@
                     return;
                 }
 
-                let data = recvQueue.shift(); // 拿到 Uint8Array
+                let data = recvQueue.shift();
                 if (data[0] != NYANITHM_API_LEVEL) {
                     console.log("固件版本过低")
                     document.getElementById('tip').innerText = "固件版本过低";
@@ -190,14 +278,11 @@
             setTimeout(function () {
                 let response = [];
                 while (recvQueue.length > 0) {
-                    let data = recvQueue.shift(); // 拿到 Uint8Array
-                    // console.log("收到：", data);
-                    // console.log(data.length);
+                    let data = recvQueue.shift();
                     for (let i = 0; i < data.length; i++) {
                         response.push(data[i]);
                     }
                 }
-                // console.log(response);
                 for (let i = 0; i < 32; i++) {
                     let tc = document.getElementById("tc" + (i + 1));
                     tc.innerText = response[i];
@@ -206,9 +291,9 @@
                 for (let i = 0; i < 6; i++) {
                     let square = document.getElementById("air" + (i + 1));
                     if (response[32] & (1 << i)) {
-                        square.style.backgroundColor = "#0000AA";
+                        square.style.backgroundColor = "#0066cc";
                     } else {
-                        square.style.backgroundColor = "";
+                        square.style.backgroundColor = "#202535";
                     }
                 }
 
@@ -257,63 +342,42 @@
             }, 100)
         }
 
-        /**
- * 将 controller_config 结构体数据封装为 Uint8Array（与C++内存布局完全一致）
- * @param {Object} config - 结构体字段数据
- * @returns {Uint8Array} 完整128字节结构体二进制数据
- */
         function packControllerConfig(config) {
-            // 结构体总长度：固定 128 字节
             const buffer = new ArrayBuffer(128);
             const u8 = new Uint8Array(buffer);
             const u16 = new Uint16Array(buffer);
             const i16 = new Int16Array(buffer);
 
-            // ===================== 按结构体顺序填充 =====================
             let offset = 0;
 
-            // uint8_t magic; (1)
             u8[offset++] = config.magic;
-
-            // uint8_t cfgVer; (1)
             u8[offset++] = config.cfgVer;
-
-            // uint8_t hwVer; (1)
             u8[offset++] = config.hwVer;
 
-            // uint8_t cfg0 ~ cfg3 (4)
             u8[offset++] = config.cfg0;
             u8[offset++] = config.cfg1;
             u8[offset++] = config.cfg2;
             u8[offset++] = config.cfg3;
 
-            // uint8_t controller_mode; (1)
             u8[offset++] = config.controller_mode;
 
-            // uint16_t airMax; (2) 小端序
             u16[offset >> 1] = config.airMax;
             offset += 2;
 
-            // uint16_t airMin; (2) 小端序
             u16[offset >> 1] = config.airMin;
             offset += 2;
 
-            // int16_t heightOffset[5]; (10) 小端序
             for (let i = 0; i < 5; i++) {
                 i16[offset >> 1] = config.heightOffset[i];
                 offset += 2;
             }
 
-            // uint8_t lightLimit; (1)
             u8[offset++] = config.lightLimit;
 
-            // uint8_t reserved[104]; (104) 填0
             for (let i = 0; i < 104; i++) {
                 u8[offset++] = 0;
             }
 
-            // ===================== 计算 XOR 校验和 =====================
-            // xorSum = 前 127 字节逐位异或
             let xorSum = 0;
             for (let i = 0; i < 127; i++) {
                 xorSum ^= u8[i];
@@ -323,13 +387,7 @@
             return u8;
         }
 
-        /**
- * 从 Uint8Array 解析出 controller_config 结构体数据（与C++布局一致）
- * @param {Uint8Array} u8Array - 128字节的结构体二进制数据
- * @returns {Object} 解析后的结构体字段
- */
         function unpackControllerConfig(u8Array) {
-            // 安全校验：必须是128字节
             if (!(u8Array instanceof Uint8Array) || u8Array.length !== 128) {
                 throw new Error('输入必须是长度为128的Uint8Array');
             }
@@ -341,7 +399,6 @@
             const config = {};
             let offset = 0;
 
-            // 开始按顺序解析
             config.magic = u8Array[offset++];
             config.cfgVer = u8Array[offset++];
             config.hwVer = u8Array[offset++];
@@ -353,14 +410,12 @@
 
             config.controller_mode = u8Array[offset++];
 
-            // uint16
             config.airMax = u16[offset >> 1];
             offset += 2;
 
             config.airMin = u16[offset >> 1];
             offset += 2;
 
-            // int16[5]
             config.heightOffset = [];
             for (let i = 0; i < 5; i++) {
                 config.heightOffset.push(i16[offset >> 1]);
@@ -369,23 +424,14 @@
 
             config.lightLimit = u8Array[offset++];
 
-            // reserved[104] 跳过，不需要返回
             offset += 104;
 
-            // 校验和
             config.xorSum = u8Array[offset++];
-
-            // 可选：自带校验函数（推荐加上）
             config.validXor = verifyXorSum(u8Array);
 
             return config;
         }
 
-        /**
-         * 校验异或和是否正确
-         * @param {Uint8Array} u8Array
-         * @returns {boolean}
-         */
         function verifyXorSum(u8Array) {
             let calc = 0;
             for (let i = 0; i < 127; i++) {
@@ -394,9 +440,8 @@
             return calc === u8Array[127];
         }
 
-
         let currentConfig = {
-            magic: CONTROLLER_CONFIG_MAGIC,           // 自定义魔数
+            magic: CONTROLLER_CONFIG_MAGIC,
             cfgVer: CONTROLLER_CONFIG_VERSION,
             hwVer: 3,
             cfg0: 0,
@@ -406,11 +451,9 @@
             controller_mode: MODE_NORMAL,
             airMax: 400,
             airMin: 50,
-            heightOffset: [0, 0, 0, 0, 0], // 5个int16
+            heightOffset: [0, 0, 0, 0, 0],
             lightLimit: 255
         };
-
-
 
         function readConfig() {
             if (getInputWorking) {
@@ -421,7 +464,7 @@
             setTimeout(function () {
                 let response = [];
                 while (recvQueue.length > 0) {
-                    let data = recvQueue.shift(); // 拿到 Uint8Array
+                    let data = recvQueue.shift();
                     for (let i = 0; i < data.length; i++) {
                         response.push(data[i]);
                     }
@@ -486,7 +529,7 @@
             setTimeout(function () {
                 let response = [];
                 while (recvQueue.length > 0) {
-                    let data = recvQueue.shift(); // 拿到 Uint8Array
+                    let data = recvQueue.shift();
                     for (let i = 0; i < data.length; i++) {
                         response.push(data[i]);
                     }
@@ -498,33 +541,7 @@
 
         }
 
-
         loopGetInput();
-
     </script>
-    <style>
-        .div_touch_channel {
-            width: 40px;
-            height: 90px;
-            border-style: solid;
-            border-width: 6px;
-            border-color: #e0e0e0;
-            text-align: center;
-            align-content: center;
-            display: inline-block;
-            font-size: 20px
-        }
-
-        .div_air {
-            width: 30px;
-            height: 30px;
-            /* background-color: lightgray; */
-            border-style: solid;
-            border-color: #e0e0e0;
-            border-width: 3px;
-            display: inline-block;
-        }
-    </style>
 </body>
-
 </html>

@@ -1,5 +1,5 @@
-#include <hw_devices.h>
 #include <controller_config.h>
+#include <hw_devices.h>
 
 typedef struct {
     uint8_t r, g, b;
@@ -15,58 +15,70 @@ static RGB hsv_to_rgb(uint8_t h) {
 
     uint8_t r, g, b;
 
-    switch (region) {
-    case 0:
-        r = 255;
-        g = t;
-        b = 0;
-        break;
-    case 1:
-        r = q;
-        g = 255;
-        b = 0;
-        break;
-    case 2:
-        r = 0;
-        g = 255;
-        b = t;
-        break;
-    case 3:
-        r = 0;
-        g = q;
-        b = 255;
-        break;
-    case 4:
-        r = t;
-        g = 0;
-        b = 255;
-        break;
-    default:
-        r = 255;
-        g = 0;
-        b = q;
-        break;
+    switch(region) {
+        case 0:
+            r = 255;
+            g = t;
+            b = 0;
+            break;
+        case 1:
+            r = q;
+            g = 255;
+            b = 0;
+            break;
+        case 2:
+            r = 0;
+            g = 255;
+            b = t;
+            break;
+        case 3:
+            r = 0;
+            g = q;
+            b = 255;
+            break;
+        case 4:
+            r = t;
+            g = 0;
+            b = 255;
+            break;
+        default:
+            r = 255;
+            g = 0;
+            b = q;
+            break;
     }
-    return (RGB){ r, g, b };
+    return (RGB){r, g, b};
 }
+
+extern uint8_t touchData32[32];
 
 // 每次调用更新一帧彩虹流水
 void update_rainbow_frame() {
 
     static uint8_t count = 0;
-    if (count == 4) {
+    if(count == 4) {
         count = 0;
 
-        static uint8_t offset = 0;  // 每次调用偏移色相
+        static uint8_t offset = 0; // 每次调用偏移色相
 
-        for (int i = 0; i < 31; i++) {
-            uint8_t hue = (i * 256 / 31 + offset) & 0xFF;  // 0-255 循环
+        for(int i = 0; i < 31; i++) {
+            uint8_t hue = (i * 256 / 31 + offset) & 0xFF; // 0-255 循环
             RGB rgb = hsv_to_rgb(hue);
-            led_controller.setPixelColor(i, WS2812::RGB((rgb.r * ControllerConfig.lightLimit) / 255, (rgb.g * ControllerConfig.lightLimit) / 255, (rgb.b * ControllerConfig.lightLimit) / 255));
+            if((i % 2 == 0) && (touchData32[i] || touchData32[i + 1])) {
+                led_controller.setPixelColor(
+                    i, WS2812::RGB(ControllerConfig.lightLimit, ControllerConfig.lightLimit,
+                                   ControllerConfig.lightLimit));
+
+            } else {
+                led_controller.setPixelColor(
+                    i, WS2812::RGB((rgb.r * ControllerConfig.lightLimit) / 255,
+                                   (rgb.g * ControllerConfig.lightLimit) / 255,
+                                   (rgb.b * ControllerConfig.lightLimit) / 255));
+            }
         }
         led_controller.show();
 
-        offset++;  // 改变偏移量，形成流动
+        offset++; // 改变偏移量，形成流动
     } else {
         count++;
     }

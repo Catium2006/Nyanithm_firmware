@@ -132,7 +132,7 @@ bool detect3116(uint8_t addr) {
     i2c_write(0, addr, buf, 1, true);
     buf[0] = 0;
     i2c_read(0, addr, buf, 1, true);
-    if(buf[0] == addr || buf[0]==0x43 || buf[0]==0x44) {
+    if(buf[0] != 0) {
         return true;
     }
     return false;
@@ -173,7 +173,7 @@ void init3116() {
             led_internal.fill(WS2812::RGB(0xff, 0, 0));
             led_internal.show();
         }
-        sleep_ms(500);
+        sleep_ms(200);
     }
 }
 

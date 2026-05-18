@@ -64,7 +64,7 @@ void update_rainbow_frame() {
         for(int i = 0; i < 31; i++) {
             uint8_t hue = (i * 256 / 31 + offset) & 0xFF; // 0-255 循环
             RGB rgb = hsv_to_rgb(hue);
-            if((i % 2 == 0) && (touchData32[i] || touchData32[i + 1])) {
+            if((i % 2 == 0) && (touchData32[31 - i] || touchData32[31 - i - 1])) {
                 led_controller.setPixelColor(
                     i, WS2812::RGB(ControllerConfig.lightLimit, ControllerConfig.lightLimit,
                                    ControllerConfig.lightLimit));

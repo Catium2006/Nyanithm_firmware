@@ -3,72 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <title>ControlPlane - 手台控制面板</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-    body {
-        background-color: #12141d;
-        color: #ffffff;
-        padding: 2rem;
-        font-size: 15px;
-    }
-    .card {
-        background-color: #1a1e2b;
-        border: 1px solid #33394f;
-        border-radius: 10px;
-        margin-bottom: 1.5rem;
-    }
-    .card-header {
-        background-color: #23283b;
-        border-bottom: 1px solid #33394f;
-        font-weight: 700;
-        font-size: 16px;
-        color: #ffffff;
-    }
-    .div_touch_channel {
-        width: 36px;
-        height: 80px;
-        border: 2px solid #555b78;
-        text-align: center;
-        align-content: center;
-        display: inline-block;
-        font-size: 17px;
-        font-weight: bold;
-        color: #ffffff !important;
-        margin: 2px;
-        border-radius: 4px;
-        background: #202535;
-    }
-    .div_air {
-        width: 36px;
-        height: 36px;
-        border: 2px solid #555b78;
-        display: inline-block;
-        margin: 4px;
-        border-radius: 6px;
-        background: #202535;
-    }
-    input[type="range"] {
-        accent-color: #3b82f6;
-    }
-    .btn {
-        border-radius: 6px;
-        font-weight: 500;
-    }
-    #tip {
-        color: #58d8ff;
-        font-weight: 600;
-        font-size: 16px;
-    }
-    label, .form-check-label, .form-select {
-        color: #ffffff !important;
-        font-weight: 500;
-    }
-    .form-select, .form-check-input {
-        background-color: #23283b;
-        border-color: #444b66;
-        color: #fff;
-    }
-</style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(145deg, #07101a 0%, #0f273d 55%, #0a1a2b 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            padding: 2rem;
+            font-size: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", sans-serif;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+        }
+        .card {
+            background: rgba(30, 38, 60, 0.20) !important;
+            backdrop-filter: blur(18px) saturate(180%);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+        .card-header {
+            background: rgba(42, 52, 80, 0.26) !important;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-weight: 500;
+            font-size: 17px;
+            color: #ffffff;
+        }
+        .div_touch_channel {
+            width: 60px;
+            height: 120px;
+            border: 2px solid rgba(100, 150, 255, 0.3);
+            text-align: center;
+            align-content: center;
+            display: inline-block;
+            font-size: 16px;
+            font-weight: 400;
+            color: #ffffff !important;
+            margin: 4px;
+            border-radius: 8px;
+            background: rgba(20, 30, 55, 0.9) !important;
+            backdrop-filter: blur(10px);
+            transition: all 0.15s ease;
+        }
+        .div_touch_channel.active {
+            background: #ffffff !important;
+            border-color: #ffffff;
+            box-shadow: 0 0 15px rgba(255,255,255,0.6);
+            color: #000 !important;
+        }
+        .div_air {
+            width: 36px;
+            height: 36px;
+            border: 2px solid rgba(140, 155, 190, 0.35);
+            display: block;
+            margin: 4px 0;
+            border-radius: 6px;
+            background: rgba(35, 45, 70, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        input[type="range"] {
+            accent-color: #54a0ff;
+        }
+        .btn {
+            border-radius: 8px;
+            font-weight: 450;
+            font-size: 15px;
+            background: rgba(70, 90, 160, 0.25);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px);
+            transition: all 0.2s ease;
+            color: #fff !important;
+        }
+        .btn:hover{
+            background: rgba(90,110,190,0.35);
+        }
+        #tip {
+            color: #74d8ff;
+            font-weight: 400;
+            font-size: 16px;
+        }
+        label, .form-check-label {
+            color: #e8edf8 !important;
+            font-weight: 400;
+            font-size: 15px;
+        }
+        .form-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 0.75rem center !important;
+            background-size: 16px 12px !important;
+            background-color: rgba(20, 30, 55, 0.9) !important;
+            backdrop-filter: blur(12px);
+            border-color: rgba(100, 150, 255, 0.3);
+            color: #ffffff !important;
+            font-weight: 400;
+            font-size: 16px;
+            padding-right: 1.5rem !important;
+        }
+        .form-select option {
+            background-color: #121a30 !important;
+            color: #ffffff !important;
+        }
+        .form-select:focus {
+            border-color: #54a0ff;
+            box-shadow: 0 0 0 0.25rem rgba(84, 160, 255, 0.25);
+        }
+        .form-check-input {
+            background-color: rgba(20, 30, 55, 0.9) !important;
+            border: 2px solid rgba(100, 150, 255, 0.5) !important;
+            backdrop-filter: blur(12px);
+        }
+        .form-check-input:checked {
+            background-color: #54a0ff !important;
+            border-color: #54a0ff !important;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e") !important;
+        }
+        .form-check-input:focus {
+            border-color: #54a0ff;
+            box-shadow: 0 0 0 0.25rem rgba(84, 160, 255, 0.25);
+        }
+        .alert-danger{
+            background: rgba(180, 40, 40, 0.18) !important;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,110,110,0.15);
+            color:#ffc0c0;
+            font-weight: 400;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -87,67 +152,74 @@
             </div>
         </div>
     </div>
+
     <div class="card">
-        <div class="card-header">触摸测试</div>
+        <div class="card-header">触摸AIR 测试</div>
         <div class="card-body">
-            <div class="mb-2">
-                <div class="div_touch_channel" id="tc31"></div>
-                <div class="div_touch_channel" id="tc29"></div>
-                <div class="div_touch_channel" id="tc27"></div>
-                <div class="div_touch_channel" id="tc25"></div>
-                <div class="div_touch_channel" id="tc23"></div>
-                <div class="div_touch_channel" id="tc21"></div>
-                <div class="div_touch_channel" id="tc19"></div>
-                <div class="div_touch_channel" id="tc17"></div>
-                <div class="div_touch_channel" id="tc15"></div>
-                <div class="div_touch_channel" id="tc13"></div>
-                <div class="div_touch_channel" id="tc11"></div>
-                <div class="div_touch_channel" id="tc9"></div>
-                <div class="div_touch_channel" id="tc7"></div>
-                <div class="div_touch_channel" id="tc5"></div>
-                <div class="div_touch_channel" id="tc3"></div>
-                <div class="div_touch_channel" id="tc1"></div>
-            </div>
-            <div>
-                <div class="div_touch_channel" id="tc32"></div>
-                <div class="div_touch_channel" id="tc30"></div>
-                <div class="div_touch_channel" id="tc28"></div>
-                <div class="div_touch_channel" id="tc26"></div>
-                <div class="div_touch_channel" id="tc24"></div>
-                <div class="div_touch_channel" id="tc22"></div>
-                <div class="div_touch_channel" id="tc20"></div>
-                <div class="div_touch_channel" id="tc18"></div>
-                <div class="div_touch_channel" id="tc16"></div>
-                <div class="div_touch_channel" id="tc14"></div>
-                <div class="div_touch_channel" id="tc12"></div>
-                <div class="div_touch_channel" id="tc10"></div>
-                <div class="div_touch_channel" id="tc8"></div>
-                <div class="div_touch_channel" id="tc6"></div>
-                <div class="div_touch_channel" id="tc4"></div>
-                <div class="div_touch_channel" id="tc2"></div>
+            <div class="d-flex align-items-start gap-3">
+                <div>
+                    <div class="mb-2">
+                        <div class="div_touch_channel" id="tc31"></div>
+                        <div class="div_touch_channel" id="tc29"></div>
+                        <div class="div_touch_channel" id="tc27"></div>
+                        <div class="div_touch_channel" id="tc25"></div>
+                        <div class="div_touch_channel" id="tc23"></div>
+                        <div class="div_touch_channel" id="tc21"></div>
+                        <div class="div_touch_channel" id="tc19"></div>
+                        <div class="div_touch_channel" id="tc17"></div>
+                        <div class="div_touch_channel" id="tc15"></div>
+                        <div class="div_touch_channel" id="tc13"></div>
+                        <div class="div_touch_channel" id="tc11"></div>
+                        <div class="div_touch_channel" id="tc9"></div>
+                        <div class="div_touch_channel" id="tc7"></div>
+                        <div class="div_touch_channel" id="tc5"></div>
+                        <div class="div_touch_channel" id="tc3"></div>
+                        <div class="div_touch_channel" id="tc1"></div>
+                    </div>
+                    <div>
+                        <div class="div_touch_channel" id="tc32"></div>
+                        <div class="div_touch_channel" id="tc30"></div>
+                        <div class="div_touch_channel" id="tc28"></div>
+                        <div class="div_touch_channel" id="tc26"></div>
+                        <div class="div_touch_channel" id="tc24"></div>
+                        <div class="div_touch_channel" id="tc22"></div>
+                        <div class="div_touch_channel" id="tc20"></div>
+                        <div class="div_touch_channel" id="tc18"></div>
+                        <div class="div_touch_channel" id="tc16"></div>
+                        <div class="div_touch_channel" id="tc14"></div>
+                        <div class="div_touch_channel" id="tc12"></div>
+                        <div class="div_touch_channel" id="tc10"></div>
+                        <div class="div_touch_channel" id="tc8"></div>
+                        <div class="div_touch_channel" id="tc6"></div>
+                        <div class="div_touch_channel" id="tc4"></div>
+                        <div class="div_touch_channel" id="tc2"></div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column justify-content-center">
+                    <div class="div_air" id="air6"></div>
+                    <div class="div_air" id="air5"></div>
+                    <div class="div_air" id="air4"></div>
+                    <div class="div_air" id="air3"></div>
+                    <div class="div_air" id="air2"></div>
+                    <div class="div_air" id="air1"></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="card">
-        <div class="card-header">AIR 感应区域</div>
-        <div class="card-body">
-            <div class="div_air" id="air1"></div>
-            <div class="div_air" id="air2"></div>
-            <div class="div_air" id="air3"></div>
-            <div class="div_air" id="air4"></div>
-            <div class="div_air" id="air5"></div>
-            <div class="div_air" id="air6"></div>
-        </div>
-    </div>
+
     <div class="card">
         <div class="card-header">参数配置</div>
         <div class="card-body">
             <div class="mb-3">
-                <label class="form-label">硬件种类</label>
+                <label class="form-label">手台型号</label>
                 <select id="hw_type" class="form-select w-auto">
                     <option value="3">27寸v2</option>
                     <option value="4">32寸v2</option>
                 </select>
+                <div class="mt-2 alert alert-danger py-2">
+                    ⚠️ 选错型号可能导致触摸异常、灯光异常，请务必选择正确的手台型号！
+                </div>
             </div>
             <div class="mb-3">
                 <div class="form-check form-check-inline">
@@ -245,7 +317,6 @@
                     let data = recvQueue.shift();
                     if (data[0] == 0xB0) {
                         controllerReady = true;
-                        console.log("连接到手台");
                         document.getElementById('tip').innerText = "手台已连接";
                         checkAPILevel();
                     }
@@ -257,7 +328,6 @@
             sendQueue.push(new Uint8Array([0xAF]));
             setTimeout(function () {
                 if (recvQueue.length == 0) {
-                    console.log("固件版本过低")
                     document.getElementById('tip').innerText = "固件版本过低";
                     controllerReady = false;
                     return;
@@ -265,12 +335,9 @@
 
                 let data = recvQueue.shift();
                 if (data[0] != NYANITHM_API_LEVEL) {
-                    console.log("固件版本过低")
                     document.getElementById('tip').innerText = "固件版本过低";
                     controllerReady = false;
                 }
-                console.log("firmware API level = " + data[0] + " , current = " + NYANITHM_API_LEVEL);
-
             }, 10)
         }
 
@@ -284,10 +351,15 @@
                         response.push(data[i]);
                     }
                 }
-                for (let i = 0; i < 32; i++) {
-                    let tc = document.getElementById("tc" + (i + 1));
-                    tc.innerText = response[i];
-                    tc.style.backgroundColor = "rgb(" + (255 - response[i]) + "," + (255 - response[i]) + ",255)"
+                for (let i = 1; i <= 32; i++) {
+                    let tc = document.getElementById("tc" + i);
+                    if (tc) {
+                        if (response[i-1] > 0) {
+                            tc.classList.add('active');
+                        } else {
+                            tc.classList.remove('active');
+                        }
+                    }
                 }
                 for (let i = 0; i < 6; i++) {
                     let square = document.getElementById("air" + (i + 1));
@@ -324,9 +396,9 @@
         function stopGetInput() {
             getInputWorking = false;
             setTimeout(function () {
-                for (let i = 0; i < 32; i++) {
-                    let tc = document.getElementById("tc" + (i + 1));
-                    tc.innerText = "";
+                for (let i = 1; i <= 32; i++) {
+                    let tc = document.getElementById("tc" + i);
+                    if (tc) tc.classList.remove('active');
                 }
             }, 50);
         }
@@ -384,7 +456,6 @@
                 xorSum ^= u8[i];
             }
             u8[127] = xorSum;
-            console.log(u8);
             return u8;
         }
 
@@ -392,44 +463,32 @@
             if (!(u8Array instanceof Uint8Array) || u8Array.length !== 128) {
                 throw new Error('输入必须是长度为128的Uint8Array');
             }
-
             const buffer = u8Array.buffer;
             const u16 = new Uint16Array(buffer);
             const i16 = new Int16Array(buffer);
-
             const config = {};
             let offset = 0;
-
             config.magic = u8Array[offset++];
             config.cfgVer = u8Array[offset++];
             config.hwVer = u8Array[offset++];
-
             config.cfg0 = u8Array[offset++];
             config.cfg1 = u8Array[offset++];
             config.cfg2 = u8Array[offset++];
             config.cfg3 = u8Array[offset++];
-
             config.controller_mode = u8Array[offset++];
-
             config.airMax = u16[offset >> 1];
             offset += 2;
-
             config.airMin = u16[offset >> 1];
             offset += 2;
-
             config.heightOffset = [];
             for (let i = 0; i < 5; i++) {
                 config.heightOffset.push(i16[offset >> 1]);
                 offset += 2;
             }
-
             config.lightLimit = u8Array[offset++];
-
             offset += 104;
-
             config.xorSum = u8Array[offset++];
             config.validXor = verifyXorSum(u8Array);
-
             return config;
         }
 
@@ -470,20 +529,14 @@
                         response.push(data[i]);
                     }
                 }
-                console.log(response);
                 currentConfig = unpackControllerConfig(new Uint8Array(response));
-
                 document.getElementById("cb1").checked = currentConfig.cfg0 & 0b10;
                 document.getElementById("cb2").checked = currentConfig.cfg0 & 0b100;
-
                 document.getElementById("cb3").checked = currentConfig.cfg1 & 0b1;
                 document.getElementById("cb4").checked = currentConfig.cfg1 & 0b10;
-
                 document.getElementById("rg1").value = currentConfig.airMin;
                 document.getElementById("rg2").value = currentConfig.airMax;
-
                 document.getElementById("hw_type").value = currentConfig.hwVer;
-
             }, 10)
         }
 
@@ -493,7 +546,6 @@
                 return;
             }
             sendQueue.push(new Uint8Array([0xB5]));
-
         }
 
         function setAndSaveConfig() {
@@ -501,47 +553,28 @@
                 alert("需要先停止输入测试");
                 return;
             }
-
             currentConfig.hwVer = document.getElementById("hw_type").value;
             currentConfig.airMin = document.getElementById("rg1").value;
             currentConfig.airMax = document.getElementById("rg2").value;
-
             let cfg0 = 0;
-            if (document.getElementById("cb1").checked) {
-                cfg0 |= 0b10;
-            }
-            if (document.getElementById("cb2").checked) {
-                cfg0 |= 0b100;
-            }
+            if (document.getElementById("cb1").checked) cfg0 |= 0b10;
+            if (document.getElementById("cb2").checked) cfg0 |= 0b100;
             currentConfig.cfg0 = cfg0;
-
             let cfg1 = 0;
-            if (document.getElementById("cb3").checked) {
-                cfg1 |= 0b1;
-            }
-            if (document.getElementById("cb4").checked) {
-                cfg1 |= 0b10;
-            }
+            if (document.getElementById("cb3").checked) cfg1 |= 0b1;
+            if (document.getElementById("cb4").checked) cfg1 |= 0b10;
             currentConfig.cfg1 = cfg1;
-
             sendQueue.push(new Uint8Array([0xB6]));
             sendQueue.push(packControllerConfig(currentConfig));
-
             setTimeout(function () {
                 let response = [];
                 while (recvQueue.length > 0) {
                     let data = recvQueue.shift();
-                    for (let i = 0; i < data.length; i++) {
-                        response.push(data[i]);
-                    }
+                    for (let i = 0; i < data.length; i++) response.push(data[i]);
                 }
-                console.log("response:");
-                console.log(new TextDecoder().decode(new Uint8Array(response)));
                 sendQueue.push(new Uint8Array([0xB4]));
             }, 500);
-
         }
-
         loopGetInput();
     </script>
 </body>

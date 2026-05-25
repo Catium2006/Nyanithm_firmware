@@ -154,7 +154,11 @@ void program_cy8cmbr3116_custom(uint8_t addr, uint8_t* cfg) {
     i2c_write(0, addr, buf, 2, true);
     sleep_ms(20);
 }
+
 void init3116() {
+    // 等待状态白光
+    led_internal.fill(WS2812::RGB(0x40, 0x40, 0x40));
+    led_internal.show();
     while(1) {
         if(detect3116(0x43) && detect3116(0x44)) {
             led_internal.fill(WS2812::RGB(0x00, 0x00, 0xff));

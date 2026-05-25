@@ -9,4 +9,8 @@ void boot_switch();
 
 void boot_flashing();
 
+void start_4kMode();
+
+void start_6kMode();
+
 #endif

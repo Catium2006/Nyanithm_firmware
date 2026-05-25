@@ -18,9 +18,13 @@ void boot_switch() {
     sleep_ms(20);
     initHwDevices();
     sleep_ms(20);
-    // if(ControllerConfig.controller_mode == MODE_NORMAL){
-    boot_normalMode();
-    // }
+    if(ControllerConfig.controller_mode == MODE_NORMAL) {
+        boot_normalMode();
+    }else if(ControllerConfig.controller_mode == MODE_4K){
+        start_4kMode();
+    }else if (ControllerConfig.controller_mode == MODE_6K){
+        start_6kMode();
+    }
 }
 
 void boot_normalMode() {

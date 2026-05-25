@@ -2,6 +2,7 @@
 #include <hw_devices.h>
 #include <tusb.h>
 #include <usb_device.h>
+#include <chuni_io.h>
 
 void start_4kMode() {
 
@@ -9,6 +10,7 @@ void start_4kMode() {
 
         updateInputState();
         updateTouchData4k();
+        maindev_loop();
         led_controller.fill(WS2812::RGB(0x08, 0x08, 0x08));
         led_controller.setPixelColor(7, WS2812::RGB(ControllerConfig.lightLimit, 0, ControllerConfig.lightLimit));
         led_controller.setPixelColor(15, WS2812::RGB(ControllerConfig.lightLimit, 0, ControllerConfig.lightLimit));
@@ -86,6 +88,7 @@ void start_6kMode() {
     while (true) {
         updateInputState();
         updateTouchData6k();
+        maindev_loop();
         led_controller.fill(WS2812::RGB(0, 0, 0));
 
         led_controller.setPixelColor(2, WS2812::RGB(25, 0, 0));

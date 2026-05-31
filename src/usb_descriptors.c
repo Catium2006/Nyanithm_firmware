@@ -364,83 +364,80 @@ enum { STRID_LANGID = 0, STRID_MANUFACTURER, STRID_PRODUCT, STRID_SERIAL, STRID_
 
 // array of pointer to string descriptors
 char const* string_desc_arr[] = {
-    (const char[]){ 0x09, 0x04 },  // 0: is supported language is English (0x0409)
-    "Catium",                      // 1: Manufacturer
-    "Nyanithm Controller",          // 2: Product
-    NULL,                          // 3: Serials will use unique ID if possible
-    "Nyanithm HID Keyboard",        // 4: HID Keyboard Interface
-    "Nyanithm HID LampArray",       // 5: HID LampArray Interface
-    "Nyanithm CDC",                 // 6: CDC Interface
+    (const char[]){ 0x09, 0x04 },  // 0: 英语 (0x0409)
+    "NyaLab",                      // 1: 厂商名
+    "Nyanithm Controller",          // 2: 产品名
+    NULL,                          // 3: 序列号（自动生成）
+    "Nyanithm HID Keyboard",        // 4: HID键盘接口
+    "Nyanithm HID LampArray",       // 5: HID灯阵接口
+    "Nyanithm CDC",                 // 6: CDC接口
 };
 
 static uint16_t _desc_str[32 + 1];
 
+static void ascii_to_utf16le(uint16_t* dest, const char* src, size_t max_chars) {
+    size_t i = 0;
+    while (i < max_chars && src[i] != '\0') {
+        dest[i] = (uint16_t)src[i] & 0xFF;
+        i++;
+    }
+    for (; i < max_chars; i++) {
+        dest[i] = 0;
+    }
+}
+
 // Invoked when received GET STRING DESCRIPTOR request
-// Application return pointer to descriptor, whose contents must exist long enough for transfer to complete
 uint16_t const* tud_descriptor_string_cb(uint8_t index, uint16_t langid) {
     (void)langid;
-    size_t chr_count;
+    size_t chr_count = 0;
+    memset(_desc_str, 0, sizeof(_desc_str));
 
     switch (index) {
     case STRID_LANGID:
-        memcpy(&_desc_str[1], string_desc_arr[0], 2);
-        chr_count = 1;
-        break;
+        // 语言ID描述符：0x0409 (英语-美国)，固定长度2字节
+        _desc_str[0] = (TUSB_DESC_STRING << 8) | 4;  // 长度=4 (2字节头 + 2字节数据)
+        _desc_str[1] = 0x0409;                       // UTF-16LE的0x0409（小端序：09 04）
+        return _desc_str;
 
     case STRID_MANUFACTURER:
         chr_count = strlen(string_desc_arr[1]);
-        memcpy(&_desc_str[1], string_desc_arr[1], chr_count);
+        ascii_to_utf16le(_desc_str + 1, string_desc_arr[1], 32);
         break;
 
     case STRID_PRODUCT:
         chr_count = strlen(string_desc_arr[2]);
-        memcpy(&_desc_str[1], string_desc_arr[2], chr_count);
+        ascii_to_utf16le(_desc_str + 1, string_desc_arr[2], 32);
         break;
 
     case STRID_SERIAL:
         chr_count = board_usb_get_serial(_desc_str + 1, 32);
+        if (chr_count == 0) {
+            ascii_to_utf16le(_desc_str + 1, "0123456789ABCDEF", 32);
+            chr_count = strlen("0123456789ABCDEF");
+        }
         break;
 
     case STRID_HID_KBD_INTERFACE:
         chr_count = strlen(string_desc_arr[4]);
-        memcpy(&_desc_str[1], string_desc_arr[4], chr_count);
+        ascii_to_utf16le(_desc_str + 1, string_desc_arr[4], 32);
         break;
 
     case STRID_HID_LAMP_INTERFACE:
         chr_count = strlen(string_desc_arr[5]);
-        memcpy(&_desc_str[1], string_desc_arr[5], chr_count);
+        ascii_to_utf16le(_desc_str + 1, string_desc_arr[5], 32);
         break;
 
     case STRID_CDC_INTERFACE:
         chr_count = strlen(string_desc_arr[6]);
-        memcpy(&_desc_str[1], string_desc_arr[6], chr_count);
+        ascii_to_utf16le(_desc_str + 1, string_desc_arr[6], 32);
         break;
 
     default:
-        // Note: the 0xEE index string is a Microsoft OS 1.0 Descriptors.
-        // https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/microsoft-defined-usb-descriptors
-
-        if (!(index < sizeof(string_desc_arr) / sizeof(string_desc_arr[0]))) {
-            return NULL;
-        }
-
-        const char* str = string_desc_arr[index];
-
-        // Cap at max char
-        chr_count = strlen(str);
-        size_t const max_count = sizeof(_desc_str) / sizeof(_desc_str[0]) - 1;  // -1 for string type
-        if (chr_count > max_count) {
-            chr_count = max_count;
-        }
-
-        // Convert ASCII string into UTF-16
-        for (size_t i = 0; i < chr_count; i++) {
-            _desc_str[1 + i] = str[i];
-        }
-        break;
+        return NULL;
     }
 
-    // first byte is length (including header), second byte is string type
+    chr_count = (chr_count > 32) ? 32 : chr_count;
+
     _desc_str[0] = (uint16_t)((TUSB_DESC_STRING << 8) | (2 * chr_count + 2));
     return _desc_str;
 }

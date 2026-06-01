@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <title>ControlPlane - 手台控制面板</title>
@@ -15,6 +16,7 @@
             font-weight: 400;
             -webkit-font-smoothing: antialiased;
         }
+
         .card {
             background: rgba(30, 38, 60, 0.20) !important;
             backdrop-filter: blur(18px) saturate(180%);
@@ -22,8 +24,9 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 12px;
             margin-bottom: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
         }
+
         .card-header {
             background: rgba(42, 52, 80, 0.26) !important;
             backdrop-filter: blur(14px);
@@ -33,6 +36,7 @@
             font-size: 17px;
             color: #ffffff;
         }
+
         .div_touch_channel {
             width: 60px;
             height: 120px;
@@ -49,12 +53,14 @@
             backdrop-filter: blur(10px);
             transition: all 0.15s ease;
         }
+
         .div_touch_channel.active {
             background: #ffffff !important;
             border-color: #ffffff;
-            box-shadow: 0 0 15px rgba(255,255,255,0.6);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
             color: #000 !important;
         }
+
         .div_air {
             width: 36px;
             height: 36px;
@@ -65,32 +71,39 @@
             background: rgba(35, 45, 70, 0.2);
             backdrop-filter: blur(10px);
         }
+
         input[type="range"] {
             accent-color: #54a0ff;
         }
+
         .btn {
             border-radius: 8px;
             font-weight: 450;
             font-size: 15px;
             background: rgba(70, 90, 160, 0.25);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(12px);
             transition: all 0.2s ease;
             color: #fff !important;
         }
-        .btn:hover{
-            background: rgba(90,110,190,0.35);
+
+        .btn:hover {
+            background: rgba(90, 110, 190, 0.35);
         }
+
         #tip {
             color: #74d8ff;
             font-weight: 400;
             font-size: 16px;
         }
-        label, .form-check-label {
+
+        label,
+        .form-check-label {
             color: #e8edf8 !important;
             font-weight: 400;
             font-size: 15px;
         }
+
         .form-select {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
             background-repeat: no-repeat !important;
@@ -104,155 +117,166 @@
             font-size: 16px;
             padding-right: 1.5rem !important;
         }
+
         .form-select option {
             background-color: #121a30 !important;
             color: #ffffff !important;
         }
+
         .form-select:focus {
             border-color: #54a0ff;
             box-shadow: 0 0 0 0.25rem rgba(84, 160, 255, 0.25);
         }
+
         .form-check-input {
             background-color: rgba(20, 30, 55, 0.9) !important;
             border: 2px solid rgba(100, 150, 255, 0.5) !important;
             backdrop-filter: blur(12px);
         }
+
         .form-check-input:checked {
             background-color: #54a0ff !important;
             border-color: #54a0ff !important;
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e") !important;
         }
+
         .form-check-input:focus {
             border-color: #54a0ff;
             box-shadow: 0 0 0 0.25rem rgba(84, 160, 255, 0.25);
         }
-        .alert-danger{
+
+        .alert-danger {
             background: rgba(180, 40, 40, 0.18) !important;
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,110,110,0.15);
-            color:#ffc0c0;
+            border: 1px solid rgba(255, 110, 110, 0.15);
+            color: #ffc0c0;
             font-weight: 400;
         }
     </style>
 </head>
+
 <body>
-<div class="container-fluid">
-    <div class="card">
-        <div class="card-header">手台链接</div>
-        <div class="card-body">
-            <button id="connectBtn" class="btn btn-primary me-2">连接串口</button>
-            <span id="tip" class="ms-3"></span>
-            <div class="mt-3">
-                <button onclick="startGetInput()" class="btn btn-success me-2">开始测试输入</button>
-                <button onclick="stopGetInput()" class="btn btn-warning me-2">停止测试输入</button>
-                <button onclick="flashFirmware()" class="btn btn-danger me-2">烧录固件</button>
-                <button onclick="readConfig()" class="btn btn-info me-2">读取设置</button>
-                <button onclick="setAndSaveConfig()" class="btn btn-secondary">应用设置</button>
-                <button onclick="eraseConfig()" class="btn btn-danger me-2">恢复默认设置</button>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">手台链接</div>
+            <div class="card-body">
+                <button id="connectBtn" class="btn btn-primary me-2">连接串口</button>
+                <span id="tip" class="ms-3"></span>
+                <div class="mt-3">
+                    <button onclick="startGetInput()" class="btn btn-success me-2">开始测试输入</button>
+                    <button onclick="stopGetInput()" class="btn btn-warning me-2">停止测试输入</button>
+                    <button onclick="flashFirmware()" class="btn btn-danger me-2">烧录固件</button>
+                    <button onclick="readConfig()" class="btn btn-info me-2">读取设置</button>
+                    <button onclick="setAndSaveConfig()" class="btn btn-secondary">应用设置</button>
+                    <button onclick="eraseConfig()" class="btn btn-danger me-2">恢复默认设置</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="card">
-        <div class="card-header">触摸AIR 测试</div>
-        <div class="card-body">
-            <div class="d-flex align-items-start gap-3">
-                <div>
-                    <div class="mb-2">
-                        <div class="div_touch_channel" id="tc31"></div>
-                        <div class="div_touch_channel" id="tc29"></div>
-                        <div class="div_touch_channel" id="tc27"></div>
-                        <div class="div_touch_channel" id="tc25"></div>
-                        <div class="div_touch_channel" id="tc23"></div>
-                        <div class="div_touch_channel" id="tc21"></div>
-                        <div class="div_touch_channel" id="tc19"></div>
-                        <div class="div_touch_channel" id="tc17"></div>
-                        <div class="div_touch_channel" id="tc15"></div>
-                        <div class="div_touch_channel" id="tc13"></div>
-                        <div class="div_touch_channel" id="tc11"></div>
-                        <div class="div_touch_channel" id="tc9"></div>
-                        <div class="div_touch_channel" id="tc7"></div>
-                        <div class="div_touch_channel" id="tc5"></div>
-                        <div class="div_touch_channel" id="tc3"></div>
-                        <div class="div_touch_channel" id="tc1"></div>
-                    </div>
+        <div class="card">
+            <div class="card-header">触摸AIR 测试</div>
+            <div class="card-body">
+                <div class="d-flex align-items-start gap-3">
                     <div>
-                        <div class="div_touch_channel" id="tc32"></div>
-                        <div class="div_touch_channel" id="tc30"></div>
-                        <div class="div_touch_channel" id="tc28"></div>
-                        <div class="div_touch_channel" id="tc26"></div>
-                        <div class="div_touch_channel" id="tc24"></div>
-                        <div class="div_touch_channel" id="tc22"></div>
-                        <div class="div_touch_channel" id="tc20"></div>
-                        <div class="div_touch_channel" id="tc18"></div>
-                        <div class="div_touch_channel" id="tc16"></div>
-                        <div class="div_touch_channel" id="tc14"></div>
-                        <div class="div_touch_channel" id="tc12"></div>
-                        <div class="div_touch_channel" id="tc10"></div>
-                        <div class="div_touch_channel" id="tc8"></div>
-                        <div class="div_touch_channel" id="tc6"></div>
-                        <div class="div_touch_channel" id="tc4"></div>
-                        <div class="div_touch_channel" id="tc2"></div>
+                        <div class="mb-2">
+                            <div class="div_touch_channel" id="tc31"></div>
+                            <div class="div_touch_channel" id="tc29"></div>
+                            <div class="div_touch_channel" id="tc27"></div>
+                            <div class="div_touch_channel" id="tc25"></div>
+                            <div class="div_touch_channel" id="tc23"></div>
+                            <div class="div_touch_channel" id="tc21"></div>
+                            <div class="div_touch_channel" id="tc19"></div>
+                            <div class="div_touch_channel" id="tc17"></div>
+                            <div class="div_touch_channel" id="tc15"></div>
+                            <div class="div_touch_channel" id="tc13"></div>
+                            <div class="div_touch_channel" id="tc11"></div>
+                            <div class="div_touch_channel" id="tc9"></div>
+                            <div class="div_touch_channel" id="tc7"></div>
+                            <div class="div_touch_channel" id="tc5"></div>
+                            <div class="div_touch_channel" id="tc3"></div>
+                            <div class="div_touch_channel" id="tc1"></div>
+                        </div>
+                        <div>
+                            <div class="div_touch_channel" id="tc32"></div>
+                            <div class="div_touch_channel" id="tc30"></div>
+                            <div class="div_touch_channel" id="tc28"></div>
+                            <div class="div_touch_channel" id="tc26"></div>
+                            <div class="div_touch_channel" id="tc24"></div>
+                            <div class="div_touch_channel" id="tc22"></div>
+                            <div class="div_touch_channel" id="tc20"></div>
+                            <div class="div_touch_channel" id="tc18"></div>
+                            <div class="div_touch_channel" id="tc16"></div>
+                            <div class="div_touch_channel" id="tc14"></div>
+                            <div class="div_touch_channel" id="tc12"></div>
+                            <div class="div_touch_channel" id="tc10"></div>
+                            <div class="div_touch_channel" id="tc8"></div>
+                            <div class="div_touch_channel" id="tc6"></div>
+                            <div class="div_touch_channel" id="tc4"></div>
+                            <div class="div_touch_channel" id="tc2"></div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column justify-content-center">
+                        <div class="div_air" id="air6"></div>
+                        <div class="div_air" id="air5"></div>
+                        <div class="div_air" id="air4"></div>
+                        <div class="div_air" id="air3"></div>
+                        <div class="div_air" id="air2"></div>
+                        <div class="div_air" id="air1"></div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="d-flex flex-column justify-content-center">
-                    <div class="div_air" id="air6"></div>
-                    <div class="div_air" id="air5"></div>
-                    <div class="div_air" id="air4"></div>
-                    <div class="div_air" id="air3"></div>
-                    <div class="div_air" id="air2"></div>
-                    <div class="div_air" id="air1"></div>
+        <div class="card">
+            <div class="card-header">参数配置</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">手台型号</label>
+                    <select id="hw_type" class="form-select w-auto">
+                        <option value="3">27寸v2</option>
+                        <option value="4">32寸v2</option>
+                    </select>
+                    <div class="mt-2 alert alert-danger py-2">
+                        ⚠️ 选错型号可能导致触摸异常、灯光异常，请务必选择正确的手台型号！
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" id="cb1" class="form-check-input">
+                        <label for="cb1" class="form-check-label">降低缝隙亮度</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" id="cb2" class="form-check-input">
+                        <label for="cb2" class="form-check-label">启用Windows动态照明</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" id="cb3" class="form-check-input">
+                        <label for="cb3" class="form-check-label">启用触摸键盘输入</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" id="cb4" class="form-check-input">
+                        <label for="cb4" class="form-check-label">启用Air键盘输入</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <input type="range" id="rg1" min="50" max="250" step="5" class="w-50 me-3">
+                        <label>Air判定低点</label>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <input type="range" id="rg2" min="250" max="800" step="10" class="w-50 me-3">
+                        <label>Air判定高点</label>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <input type="range" id="rg3" min="0" max="15" step="1" class="w-50 me-3">
+                        <label>附加延迟</label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="card">
-        <div class="card-header">参数配置</div>
-        <div class="card-body">
-            <div class="mb-3">
-                <label class="form-label">手台型号</label>
-                <select id="hw_type" class="form-select w-auto">
-                    <option value="3">27寸v2</option>
-                    <option value="4">32寸v2</option>
-                </select>
-                <div class="mt-2 alert alert-danger py-2">
-                    ⚠️ 选错型号可能导致触摸异常、灯光异常，请务必选择正确的手台型号！
-                </div>
-            </div>
-            <div class="mb-3">
-                <div class="form-check form-check-inline">
-                    <input type="checkbox" id="cb1" class="form-check-input">
-                    <label for="cb1" class="form-check-label">降低缝隙亮度</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input type="checkbox" id="cb2" class="form-check-input">
-                    <label for="cb2" class="form-check-label">启用Windows动态照明</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input type="checkbox" id="cb3" class="form-check-input">
-                    <label for="cb3" class="form-check-label">启用触摸键盘输入</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input type="checkbox" id="cb4" class="form-check-input">
-                    <label for="cb4" class="form-check-label">启用Air键盘输入</label>
-                </div>
-            </div>
-            <div class="mb-3">
-                <div class="d-flex align-items-center mb-2">
-                    <input type="range" id="rg1" min="50" max="250" step="5" class="w-50 me-3">
-                    <label>Air判定低点</label>
-                </div>
-                <div class="d-flex align-items-center">
-                    <input type="range" id="rg2" min="250" max="800" step="10" class="w-50 me-3">
-                    <label>Air判定高点</label>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script>
+    <script>
         const NYANITHM_API_LEVEL = 0x11;
         const CONTROLLER_CONFIG_MAGIC = 0x88;
         const CONTROLLER_CONFIG_VERSION = 0x03;
@@ -354,7 +378,7 @@
                 for (let i = 1; i <= 32; i++) {
                     let tc = document.getElementById("tc" + i);
                     if (tc) {
-                        if (response[i-1] > 0) {
+                        if (response[i - 1] > 0) {
                             tc.classList.add('active');
                         } else {
                             tc.classList.remove('active');
@@ -447,7 +471,10 @@
 
             u8[offset++] = config.lightLimit;
 
-            for (let i = 0; i < 104; i++) {
+            u8[offset++] = config.latency;
+
+
+            for (let i = 0; i < 103; i++) {
                 u8[offset++] = 0;
             }
 
@@ -461,6 +488,7 @@
 
         function unpackControllerConfig(u8Array) {
             if (!(u8Array instanceof Uint8Array) || u8Array.length !== 128) {
+                console.log("length = "+u8Array.length);
                 throw new Error('输入必须是长度为128的Uint8Array');
             }
             const buffer = u8Array.buffer;
@@ -486,7 +514,8 @@
                 offset += 2;
             }
             config.lightLimit = u8Array[offset++];
-            offset += 104;
+            config.latency = u8Array[offset++];
+            offset += 103;
             config.xorSum = u8Array[offset++];
             config.validXor = verifyXorSum(u8Array);
             return config;
@@ -536,8 +565,9 @@
                 document.getElementById("cb4").checked = currentConfig.cfg1 & 0b10;
                 document.getElementById("rg1").value = currentConfig.airMin;
                 document.getElementById("rg2").value = currentConfig.airMax;
+                document.getElementById("rg3").value = currentConfig.latency;
                 document.getElementById("hw_type").value = currentConfig.hwVer;
-            }, 10)
+            }, 50)
         }
 
         function eraseConfig() {
@@ -564,6 +594,7 @@
             if (document.getElementById("cb3").checked) cfg1 |= 0b1;
             if (document.getElementById("cb4").checked) cfg1 |= 0b10;
             currentConfig.cfg1 = cfg1;
+            currentConfig.latency = document.getElementById("rg3").value;
             sendQueue.push(new Uint8Array([0xB6]));
             sendQueue.push(packControllerConfig(currentConfig));
             setTimeout(function () {
@@ -578,4 +609,5 @@
         loopGetInput();
     </script>
 </body>
+
 </html>

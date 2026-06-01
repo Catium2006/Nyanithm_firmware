@@ -86,9 +86,23 @@ struct NyanithmInput {
 
 NyanithmInput inputState;
 
-void maindev_loop() {
+uint8_t inputState_buffer[16][32];
+
+void syncInputState() {
+    uint8_t ltc = ControllerConfig.latency;
+    if(ltc > 15) {
+        ltc = 15;
+    }
     for(int i = 0; i < 32; i++) {
-        inputState.slider[i] = touchData32[i];
+        inputState_buffer[0][i] = touchData32[i];
+    }
+    for(int i = ltc; i > 0; i--) {
+        for(int j = 0; j < 32; j++) {
+            inputState_buffer[i][j] = inputState_buffer[i - 1][j];
+        }
+    }
+    for(int i = 0; i < 32; i++) {
+        inputState.slider[i] = inputState_buffer[ltc][i];
     }
     inputState.air = 0;
     for(int i = 0; i < 6; i++) {
@@ -96,6 +110,11 @@ void maindev_loop() {
             inputState.air |= 1 << i;
         }
     }
+}
+
+void maindev_loop() {
+
+    syncInputState();
 
     while(tud_cdc_available()) {
         game_connected = true;

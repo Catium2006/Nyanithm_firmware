@@ -39,7 +39,8 @@ struct controller_config {
     uint16_t airMin;         // air判定下限
     int16_t heightOffset[5]; // 高度偏移值
     uint8_t lightLimit;      //
-    uint8_t reserved[104];   //
+    uint8_t latency;         // 
+    uint8_t reserved[103];   //
     uint8_t xorSum;          // 前127字节异或和, 用于校验
 };
 

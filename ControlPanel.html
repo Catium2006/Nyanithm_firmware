@@ -259,7 +259,7 @@
                         <label for="cb4" class="form-check-label">启用Air键盘输入</label>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" style="line-height:25pt;">
                     <div class="d-flex align-items-center mb-2">
                         <input type="range" id="rg1" min="50" max="250" step="5" class="w-50 me-3">
                         <label>Air判定低点</label>
@@ -271,6 +271,10 @@
                     <div class="d-flex align-items-center">
                         <input type="range" id="rg3" min="0" max="15" step="1" class="w-50 me-3">
                         <label>附加延迟</label>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <input type="range" id="rg4" min="0" max="255" step="1" class="w-50 me-3">
+                        <label>灯光亮度</label>
                     </div>
                 </div>
             </div>
@@ -349,6 +353,10 @@
         }
 
         function checkAPILevel() {
+            if (!connected) {
+                alert("需要先连接手台");
+                return
+            }
             sendQueue.push(new Uint8Array([0xAF]));
             setTimeout(function () {
                 if (recvQueue.length == 0) {
@@ -366,6 +374,9 @@
         }
 
         function getInput() {
+            if (!connected) {
+                return;
+            }
             sendQueue.push(new Uint8Array([0xB1]));
             setTimeout(function () {
                 let response = [];
@@ -414,10 +425,18 @@
         }
 
         function startGetInput() {
+            if (!connected) {
+                alert("需要先连接手台");
+                return
+            }
             getInputWorking = true;
         }
 
         function stopGetInput() {
+            if (!connected) {
+                alert("需要先连接手台");
+                return
+            }
             getInputWorking = false;
             setTimeout(function () {
                 for (let i = 1; i <= 32; i++) {
@@ -428,11 +447,15 @@
         }
 
         function flashFirmware() {
+            if (!connected) {
+                alert("需要先连接手台");
+                return;
+            }
             if (getInputWorking) {
                 alert("需要先停止输入测试");
                 return;
             }
-            alert("需要手动复制固件到RPI-RP2设备");
+            alert("需要手动复制固件到RPI-RP2设备\r\n如果不想更新固件, 请重新插拔设备");
             sendQueue.push(new Uint8Array([0xB8]));
             setTimeout(function () {
                 location.reload(true);
@@ -488,7 +511,7 @@
 
         function unpackControllerConfig(u8Array) {
             if (!(u8Array instanceof Uint8Array) || u8Array.length !== 128) {
-                console.log("length = "+u8Array.length);
+                console.log("length = " + u8Array.length);
                 throw new Error('输入必须是长度为128的Uint8Array');
             }
             const buffer = u8Array.buffer;
@@ -566,6 +589,7 @@
                 document.getElementById("rg1").value = currentConfig.airMin;
                 document.getElementById("rg2").value = currentConfig.airMax;
                 document.getElementById("rg3").value = currentConfig.latency;
+                document.getElementById("rg4").value = currentConfig.lightLimit;
                 document.getElementById("hw_type").value = currentConfig.hwVer;
             }, 50)
         }
@@ -595,6 +619,7 @@
             if (document.getElementById("cb4").checked) cfg1 |= 0b10;
             currentConfig.cfg1 = cfg1;
             currentConfig.latency = document.getElementById("rg3").value;
+            currentConfig.lightLimit = document.getElementById("rg4").value;
             sendQueue.push(new Uint8Array([0xB6]));
             sendQueue.push(packControllerConfig(currentConfig));
             setTimeout(function () {

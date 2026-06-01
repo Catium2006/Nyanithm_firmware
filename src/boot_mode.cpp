@@ -6,9 +6,9 @@
 #include <hardware/watchdog.h>
 #include <hw_devices.h>
 #include <i2c_port.h>
+#include <pico/bootrom.h>
 #include <pico/flash.h>
 #include <rainbow.h>
-#include <pico/bootrom.h>
 
 void reboot() {
     watchdog_reboot(0, 0, 10);
@@ -21,10 +21,13 @@ void boot_switch() {
     sleep_ms(20);
     if(ControllerConfig.controller_mode == MODE_NORMAL) {
         boot_normalMode();
-    }else if(ControllerConfig.controller_mode == MODE_4K){
+    } else if(ControllerConfig.controller_mode == MODE_4K) {
         start_4kMode();
-    }else if (ControllerConfig.controller_mode == MODE_6K){
+    } else if(ControllerConfig.controller_mode == MODE_6K) {
         start_6kMode();
+    } else {
+        ControllerConfig.controller_mode = MODE_NORMAL;
+        boot_normalMode();
     }
 }
 
@@ -44,7 +47,7 @@ void boot_normalMode() {
 }
 
 void boot_flashing() {
-    led_controller.fill(WS2812::RGB(100,0,0));
+    led_controller.fill(WS2812::RGB(100, 0, 0));
     led_controller.show();
-    rom_reset_usb_boot(0,0);
+    rom_reset_usb_boot(0, 0);
 }

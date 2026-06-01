@@ -161,20 +161,20 @@
             <div class="card-header">手台链接</div>
             <div class="card-body">
                 <button id="connectBtn" class="btn btn-primary me-2">连接串口</button>
-                <span id="tip" class="ms-3"></span>
-                <div class="mt-3">
-                    <button onclick="startGetInput()" class="btn btn-success me-2">开始测试输入</button>
-                    <button onclick="stopGetInput()" class="btn btn-warning me-2">停止测试输入</button>
-                    <button onclick="flashFirmware()" class="btn btn-danger me-2">烧录固件</button>
-                    <button onclick="readConfig()" class="btn btn-info me-2">读取设置</button>
-                    <button onclick="setAndSaveConfig()" class="btn btn-secondary">应用设置</button>
-                    <button onclick="eraseConfig()" class="btn btn-danger me-2">恢复默认设置</button>
-                </div>
+                <!-- <span id="tip" class="ms-3"></span> -->
+                <!-- <div class="mt-3"> -->
+                <button onclick="flashFirmware()" class="btn btn-danger me-2" style="margin-left:2cm;">更新固件</button>
+                <!-- </div> -->
+                 <span id="tip" class="ms-3"></span>
             </div>
         </div>
 
         <div class="card">
             <div class="card-header">触摸AIR 测试</div>
+            <div class="mt-3 card-body">
+                <button onclick="startGetInput()" class="btn btn-success me-2">开始测试输入</button>
+                <button onclick="stopGetInput()" class="btn btn-warning me-2">停止测试输入</button>
+            </div>
             <div class="card-body">
                 <div class="d-flex align-items-start gap-3">
                     <div>
@@ -231,6 +231,12 @@
         <div class="card">
             <div class="card-header">参数配置</div>
             <div class="card-body">
+                <button onclick="readConfig()" class="btn btn-info me-2">读取设置</button>
+                <button onclick="setAndSaveConfig()" class="btn btn-secondary">应用设置</button>
+                <button onclick="eraseConfig()" class="btn btn-danger me-2" style="margin-left:2cm;">恢复默认设置并应用</button>
+                <div class="mt-2 alert alert-danger py-2">
+                    ⚠️ 下列选项保存设置重新插拔后生效
+                </div>
                 <div class="mb-3">
                     <label class="form-label">手台型号</label>
                     <select id="hw_type" class="form-select w-auto">
@@ -258,6 +264,15 @@
                         <input type="checkbox" id="cb4" class="form-check-input">
                         <label for="cb4" class="form-check-label">启用Air键盘输入</label>
                     </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">手台模式</label>
+                    <select id="controller_mode" class="form-select w-auto">
+                        <option value="0">正常模式</option>
+                        <option value="1">4K模式</option>
+                        <option value="2">6K模式</option>
+                    </select>
+
                 </div>
                 <div class="mb-3" style="line-height:25pt;">
                     <div class="d-flex align-items-center mb-2">
@@ -564,10 +579,15 @@
             airMax: 400,
             airMin: 50,
             heightOffset: [0, 0, 0, 0, 0],
-            lightLimit: 255
+            lightLimit: 255,
+            latency: 0,
         };
 
         function readConfig() {
+            if (!connected) {
+                alert("需要先连接手台");
+                return;
+            }
             if (getInputWorking) {
                 alert("需要先停止输入测试");
                 return;
@@ -591,18 +611,53 @@
                 document.getElementById("rg3").value = currentConfig.latency;
                 document.getElementById("rg4").value = currentConfig.lightLimit;
                 document.getElementById("hw_type").value = currentConfig.hwVer;
+                document.getElementById("controller_mode").value = currentConfig.controller_mode;
             }, 50)
         }
 
         function eraseConfig() {
+            if (!connected) {
+                alert("需要先连接手台");
+                return;
+            }
             if (getInputWorking) {
                 alert("需要先停止输入测试");
                 return;
             }
+            currentConfig = {
+                magic: CONTROLLER_CONFIG_MAGIC,
+                cfgVer: CONTROLLER_CONFIG_VERSION,
+                hwVer: 3,
+                cfg0: 0,
+                cfg1: 0,
+                cfg2: 0,
+                cfg3: 0,
+                controller_mode: MODE_NORMAL,
+                airMax: 400,
+                airMin: 50,
+                heightOffset: [0, 0, 0, 0, 0],
+                lightLimit: 255,
+                latency: 0,
+            };
+            document.getElementById("cb1").checked = currentConfig.cfg0 & 0b10;
+            document.getElementById("cb2").checked = currentConfig.cfg0 & 0b100;
+            document.getElementById("cb3").checked = currentConfig.cfg1 & 0b1;
+            document.getElementById("cb4").checked = currentConfig.cfg1 & 0b10;
+            document.getElementById("rg1").value = currentConfig.airMin;
+            document.getElementById("rg2").value = currentConfig.airMax;
+            document.getElementById("rg3").value = currentConfig.latency;
+            document.getElementById("rg4").value = currentConfig.lightLimit;
+            document.getElementById("hw_type").value = currentConfig.hwVer;
+            document.getElementById("controller_mode").value = currentConfig.controller_mode;
+
             sendQueue.push(new Uint8Array([0xB5]));
         }
 
         function setAndSaveConfig() {
+            if (!connected) {
+                alert("需要先连接手台");
+                return;
+            }
             if (getInputWorking) {
                 alert("需要先停止输入测试");
                 return;
@@ -620,6 +675,7 @@
             currentConfig.cfg1 = cfg1;
             currentConfig.latency = document.getElementById("rg3").value;
             currentConfig.lightLimit = document.getElementById("rg4").value;
+            currentConfig.controller_mode = document.getElementById("controller_mode").value;
             sendQueue.push(new Uint8Array([0xB6]));
             sendQueue.push(packControllerConfig(currentConfig));
             setTimeout(function () {

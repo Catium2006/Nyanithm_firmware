@@ -160,7 +160,7 @@ void maindev_loop() {
             program_cy8cmbr3116_custom(address, cfg);
         }
     }
-    if(to_ms_since_boot(get_absolute_time()) - connected_time > 5000) {
+    if(to_ms_since_boot(get_absolute_time()) - connected_time > 2000) {
         game_connected = false;
     }
 }

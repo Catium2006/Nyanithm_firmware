@@ -8,6 +8,7 @@
 #include <i2c_port.h>
 #include <pico/flash.h>
 #include <rainbow.h>
+#include <pico/bootrom.h>
 
 void reboot() {
     watchdog_reboot(0, 0, 10);
@@ -43,6 +44,7 @@ void boot_normalMode() {
 }
 
 void boot_flashing() {
-    flash_safe_execute([](void* p) { flash_range_erase(0, 4096); }, nullptr, 100);
-    reboot();
+    led_controller.fill(WS2812::RGB(100,0,0));
+    led_controller.show();
+    rom_reset_usb_boot(0,0);
 }

@@ -14,8 +14,6 @@
 
 # Library
 
-[Adafruit_MPR121](https://github.com/adafruit/Adafruit_MPR121)
-
 [vl53l0x-arduino](https://github.com/pololu/vl53l0x-arduino)
 
 [CypressCY8CMBR3116](https://github.com/sebastianregelmann/CypressCY8CMBR3116)

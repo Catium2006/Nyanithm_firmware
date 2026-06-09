@@ -8,12 +8,10 @@ VL53L0X tof2(1, 0x29);
 VL53L0X tof3(1, 0x29);
 VL53L0X tof4(1, 0x29);
 
-CY8CMBR3116 MBR3116A(0, 0x40);
-CY8CMBR3116 MBR3116B(0, 0x41);
-CY8CMBR3116 MBR3116C(0, 0x42);
+CY8CMBR3116 MBR3116D(0,0x43);
+CY8CMBR3116 MBR3116E(0,0x44);
 
-CY8CMBR3116 MBR3116D(0, 0x43);
-CY8CMBR3116 MBR3116E(0, 0x44);
+CY8CMBR3116 *p3116l, *p3116r;
 
 PCA954X mux0(1, 0x70, GPIO_PCA9545_RESET);
 
@@ -40,7 +38,7 @@ void resetToF() {
 void initToF() {
 
     initToFReset();
-    resetToF();
+    // resetToF();
 
     sleep_ms(2);
 
@@ -163,7 +161,7 @@ void init3116() {
         if(detect3116(0x43) && detect3116(0x44)) {
             led_internal.fill(WS2812::RGB(0x00, 0x00, 0xff));
             led_internal.show();
-            return;
+            break;
         } else if(detect3116(0x43)) {
             if(detect3116(0x37)) {
                 program_cy8cmbr3116_custom(0x37, cy8cmbr3116_cfg_0x44);
@@ -178,6 +176,10 @@ void init3116() {
             led_internal.show();
         }
         sleep_ms(200);
+    }
+    if(ControllerConfig.cfg1 & CFG1_BIT_REVERSE_TOUCH) {
+        MBR3116D = CY8CMBR3116(0, 0x44);
+        MBR3116E = CY8CMBR3116(0, 0x43);
     }
 }
 

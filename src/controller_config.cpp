@@ -18,7 +18,7 @@ controller_config defaultConfig{
     .controller_mode = MODE_NORMAL,      //
     .airMax = 400,                       //
     .airMin = 50,                        //
-    .heightOffset = {0, 0, 0, 0},        //
+    .heightOffset = {0, 0, 0, 0, 0},        //
     .lightLimit = 255,                   //
     .latency = 0,                        //
     .xorSum = 0,                         // 前127字节异或和

@@ -53,15 +53,18 @@ void MPR121::init(uint8_t touchThreshold, uint8_t releaseThreshold, bool autocon
 
     // Serial.println("write Configuration to sensor ...");
     setThresholds(touchThreshold, releaseThreshold);
-    writeRegister(MPR121_MHDR, 0x01);
+    writeRegister(MPR121_MHDR, 0x01);  // round4: revert to round1 (MHDR too large dragged baseline down during touch => stickier)
     writeRegister(MPR121_NHDR, 0x01);
-    writeRegister(MPR121_NCLR, 0x0E);
+    writeRegister(MPR121_NCLR, 0x0E);  // round4: revert to round1 (keep verified swipe feel)
     writeRegister(MPR121_FDLR, 0x00);
 
     writeRegister(MPR121_MHDF, 0x01);
-    writeRegister(MPR121_NHDF, 0x05);
-    writeRegister(MPR121_NCLF, 0x01);
-    writeRegister(MPR121_FDLF, 0x00);
+    // falling baseline tracking slowed: fix slow-swipe / light-press missed trigger
+    // NCLF 1->63 (need 63 consecutive samples before baseline follows touch),
+    // NHDF 2->1 (smaller noise-step), FDLF 0->4 (small-delta delay)
+    writeRegister(MPR121_NHDF, 0x01);
+    writeRegister(MPR121_NCLF, 0x7F);  // round5: 63->127, further slow falling baseline tracking (fix <2cm/s slow-swipe miss + reduce sticky)
+    writeRegister(MPR121_FDLF, 0x04);
 
     writeRegister(MPR121_NHDT, 0x00);
     writeRegister(MPR121_NCLT, 0x00);

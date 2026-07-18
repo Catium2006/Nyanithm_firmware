@@ -91,17 +91,17 @@ void initToF() {
 }
 
 void initMPR121() {
-    mpr0.init(4, 5, true);
-    mpr1.init(4, 5, true);
-    mpr2.init(4, 5, true);
+    mpr0.init(6, 3, true);
+    mpr1.init(6, 3, true);
+    mpr2.init(6, 3, true);
 
     mpr0.setThresholds(ControllerConfig.th_touch, ControllerConfig.th_release);
     mpr1.setThresholds(ControllerConfig.th_touch, ControllerConfig.th_release);
     mpr2.setThresholds(ControllerConfig.th_touch, ControllerConfig.th_release);
 
     uint8_t dt, dr;
-    dt = ControllerConfig.debounce & 0b0111;
-    dr = (ControllerConfig.debounce >> 4) & 0b111;
+    dt = ControllerConfig.debounce & 0b1111;
+    dr = (ControllerConfig.debounce >> 4) & 0b1111;
     mpr0.setDebounce(dt, dr);
     mpr1.setDebounce(dt, dr);
     mpr2.setDebounce(dt, dr);

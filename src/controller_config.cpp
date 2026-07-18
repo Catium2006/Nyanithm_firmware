@@ -15,9 +15,9 @@ controller_config defaultConfig{
     .cfg1 = 0x00,                         //
     .cfg2 = 0x00,                         //
     .cfg3 = 0x00,                         //
-    .th_touch = 4,                        //
-    .th_release = 5,                      //
-    .debounce = 0b00010001,               //
+    .th_touch = 6,                        //
+    .th_release = 3,                      //
+    .debounce = 0b00110011,               //
     .airMax = 500,                        //
     .airMin = 200,                        //
     .heightOffset = { 0, 0, 0, 0 },       //

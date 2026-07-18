@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyanithm v1 专用测试面板</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #00d2ff;
+            --accent-2: #7b2cbf;
+            --danger: #ff4d6d;
+            --success: #00f5d4;
+            --warn: #ffd166;
+        }
+
+        body {
+            background: linear-gradient(145deg, #070b14 0%, #0f1724 55%, #0a101a 100%);
+            min-height: 100vh;
+            color: #e8eef5;
+            padding: 1.5rem;
+            font-size: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, "Microsoft YaHei", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, var(--accent), #9d4edd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.25rem;
+        }
+
+        .subtitle {
+            color: #8b9bb4;
+            font-size: 0.9rem;
+        }
+
+        .card {
+            background: rgba(24, 31, 46, 0.55) !important;
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
+            color: #e8eef5;
+        }
+
+        .card-header {
+            background: rgba(40, 50, 74, 0.35) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px 14px 0 0 !important;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .form-label {
+            color: #aab6ca;
+            font-size: 0.82rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .form-control,
+        .form-select {
+            background: rgba(10, 14, 22, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #e8eef5;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: rgba(10, 14, 22, 0.75);
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 210, 255, 0.2);
+        }
+
+        .form-check-label {
+            font-size: 0.88rem;
+            color: #cdd6e4;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #0066ff, #00a8ff);
+            border: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(90deg, #00b894, #00d2ff);
+            border: none;
+        }
+
+        .btn-warning {
+            background: linear-gradient(90deg, #fdcb6e, #e17055);
+            border: none;
+            color: #081018;
+        }
+
+        .btn-danger {
+            background: linear-gradient(90deg, #d63031, #ff4d6d);
+            border: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .badge {
+            font-weight: 500;
+            font-size: 0.75rem;
+            padding: 0.4em 0.65em;
+        }
+
+        .slider-grid {
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+            gap: 5px;
+        }
+
+        .slider-cell {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: #8b9bb4;
+            transition: all 0.08s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .slider-cell.active {
+            background: linear-gradient(145deg, var(--accent), var(--accent-2));
+            color: #fff;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.35);
+            border-color: transparent;
+        }
+
+        .air-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+
+        .air-cell {
+            height: 48px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #8b9bb4;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.05s ease;
+        }
+
+        .air-cell.active {
+            background: linear-gradient(145deg, var(--success), var(--accent));
+            color: #081018;
+            box-shadow: 0 0 12px rgba(0, 245, 212, 0.35);
+        }
+
+        .led-strip {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .led-pixel {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #1a2332;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: background 0.05s ease;
+        }
+
+        .metric-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .metric-value {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: #8b9bb4;
+        }
+
+        pre.log-box {
+            background: rgba(8, 12, 18, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 0.75rem;
+            max-height: 220px;
+            overflow-y: auto;
+            font-size: 0.78rem;
+            color: #a6b3c8;
+            margin-bottom: 0;
+        }
+
+        .tof-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .tof-bar-fill {
+            flex: 1;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .tof-bar-inner {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            border-radius: 5px;
+            transition: width 0.1s ease;
+        }
+
+        .disabled-overlay {
+            opacity: 0.55;
+            pointer-events: none;
+            filter: grayscale(0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-3">
+            <div>
+                <h1>Nyanithm v1 专用测试面板</h1>
+                <div class="subtitle">API_LEVEL 0x10 / cfgVer 0x02 / 4×ToF / MPR121 或 CY8CMBR3116</div>
+            </div>
+            <div class="text-end">
+                <span id="connBadge" class="badge bg-secondary">未连接</span>
+                <span id="modeBadge" class="badge bg-dark border">普通模式</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">连接与设备信息</div>
+            <div class="card-body">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <button id="btnConnect" class="btn btn-primary w-100">选择串口并连接</button>
+                        <button id="btnDisconnect" class="btn btn-secondary w-100 mt-2" style="display:none">断开连接</button>
+                    </div>
+                    <div class="col-md-4">
+                        <button id="btnApiLevel" class="btn btn-success w-100" disabled>读取 API Level</button>
+                    </div>
+                    <div class="col-md-4">
+                        <button id="btnDetect" class="btn btn-success w-100" disabled>设备握手 (0xB0)</button>
+                    </div>
+                </div>
+                <div class="row g-3 mt-1">
+                    <div class="col-md-3 metric-card mt-3">
+                        <div class="metric-label">API Level</div>
+                        <div id="apiLevelVal" class="metric-value">-</div>
+                    </div>
+                    <div class="col-md-3 metric-card mt-3">
+                        <div class="metric-label">输入帧率</div>
+                        <div id="fpsVal" class="metric-value">0</div>
+                    </div>
+                    <div class="col-md-3 metric-card mt-3">
+                        <div class="metric-label">输入轮询</div>
+                        <div id="pollVal" class="metric-value">0</div>
+                    </div>
+                    <div class="col-md-3 metric-card mt-3">
+                        <div class="metric-label">数据包</div>
+                        <div id="pktVal" class="metric-value">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">配置模式控制</div>
+            <div class="card-body">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <button id="btnEnterConfig" class="btn btn-warning w-100" disabled>进入配置模式 (0xB3)</button>
+                        <div class="form-text text-muted">进入后 HID 输入暂停，可读写配置、查看状态。</div>
+                    </div>
+                    <div class="col-md-6">
+                        <button id="btnExitConfig" class="btn btn-danger w-100" disabled>退出配置模式 / 重启 (0xB9)</button>
+                        <div class="form-text text-muted">设备会复位重启，串口需重新连接。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="card-header">
+                        <span>实时输入测试</span>
+                        <div class="form-check form-switch m-0">
+                            <input class="form-check-input" type="checkbox" id="inputToggle" checked disabled>
+                            <label class="form-check-label" for="inputToggle">轮询</label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="form-label">Slider (32 键)</span>
+                                <span id="sliderSummary" class="small text-muted">无输入</span>
+                            </div>
+                            <div id="sliderGrid" class="slider-grid"></div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="form-label">Air (6 键)</span>
+                                <span id="airSummary" class="small text-muted">无输入</span>
+                            </div>
+                            <div id="airGrid" class="air-grid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span>灯光测试 (31 颗 WS2812)</span>
+                        <span class="badge bg-info text-dark" id="ledFps">FPS: 0</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="led-strip mb-3" id="ledStrip"></div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-4"><button id="ledOff" class="btn btn-secondary w-100" disabled>全灭</button></div>
+                            <div class="col-4"><button id="ledWhite" class="btn btn-secondary w-100" disabled>白光</button></div>
+                            <div class="col-4"><button id="ledRed" class="btn btn-secondary w-100" disabled>红光</button></div>
+                            <div class="col-4"><button id="ledGreen" class="btn btn-secondary w-100" disabled>绿光</button></div>
+                            <div class="col-4"><button id="ledBlue" class="btn btn-secondary w-100" disabled>蓝光</button></div>
+                            <div class="col-4"><button id="ledChase" class="btn btn-secondary w-100" disabled>追逐</button></div>
+                            <div class="col-6"><button id="ledRainbow" class="btn btn-secondary w-100" disabled>彩虹流动</button></div>
+                            <div class="col-6"><button id="ledStop" class="btn btn-danger w-100" disabled>停止动画</button></div>
+                        </div>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-md-4">
+                                <label class="form-label">亮度限制 (lightLimit)</label>
+                                <input type="range" class="form-range" id="ledLimit" min="0" max="255" value="255" disabled>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">速度 (ms)</label>
+                                <input type="range" class="form-range" id="ledSpeed" min="10" max="200" value="50">
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button id="ledCustom" class="btn btn-primary w-100" disabled>发送当前颜色</button>
+                            </div>
+                        </div>
+                        <input type="color" id="ledColor" class="form-control mt-2" value="#00d2ff" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card" id="configCard">
+                    <div class="card-header">v1 配置参数</div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="form-label">硬件版本 hwVer</label>
+                                <select id="cfgHwVer" class="form-select" disabled>
+                                    <option value="1" selected>1 (v1 硬件)</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">配置版本 cfgVer</label>
+                                <input type="text" id="cfgVer" class="form-control" value="0x02" disabled>
+                            </div>
+                        </div>
+                        <div class="row g-2 mt-1">
+                            <div class="col-4"><div class="form-check"><input class="form-check-input" type="checkbox" id="cfgForce16" disabled><label class="form-check-label" for="cfgForce16">16灯模式</label></div></div>
+                            <div class="col-4"><div class="form-check"><input class="form-check-input" type="checkbox" id="cfgMbr3116" disabled><label class="form-check-label" for="cfgMbr3116">使用 3116</label></div></div>
+                            <div class="col-4"><div class="form-check"><input class="form-check-input" type="checkbox" id="cfgDarkerGap" disabled><label class="form-check-label" for="cfgDarkerGap">间隙暗化</label></div></div>
+                        </div>
+                        <div class="row g-2 mt-1">
+                            <div class="col-6"><div class="form-check"><input class="form-check-input" type="checkbox" id="cfgKbSlider" disabled><label class="form-check-label" for="cfgKbSlider">Slider 键盘输入</label></div></div>
+                            <div class="col-6"><div class="form-check"><input class="form-check-input" type="checkbox" id="cfgKbAir" disabled><label class="form-check-label" for="cfgKbAir">Air 键盘输入</label></div></div>
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-4">
+                                <label class="form-label">触摸阈值 th_touch</label>
+                                <input type="number" id="cfgThTouch" class="form-control" min="0" max="255" value="6" disabled>
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label">释放阈值 th_release</label>
+                                <input type="number" id="cfgThRelease" class="form-control" min="0" max="255" value="3" disabled>
+                            </div>
+                            <div class="col-4">
+                                <label class="form-label">消抖 debounce</label>
+                                <input type="number" id="cfgDebounce" class="form-control" min="0" max="255" value="51" disabled>
+                            </div>
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-6">
+                                <label class="form-label">Air 判定上限 airMax</label>
+                                <input type="number" id="cfgAirMax" class="form-control" min="0" max="65535" value="500" disabled>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">Air 判定下限 airMin</label>
+                                <input type="number" id="cfgAirMin" class="form-control" min="0" max="65535" value="200" disabled>
+                            </div>
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-3"><label class="form-label">ToF0 偏移</label><input type="number" id="cfgOff0" class="form-control" disabled></div>
+                            <div class="col-3"><label class="form-label">ToF1 偏移</label><input type="number" id="cfgOff1" class="form-control" disabled></div>
+                            <div class="col-3"><label class="form-label">ToF2 偏移</label><input type="number" id="cfgOff2" class="form-control" disabled></div>
+                            <div class="col-3"><label class="form-label">ToF3 偏移</label><input type="number" id="cfgOff3" class="form-control" disabled></div>
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-6">
+                                <label class="form-label">灯光上限 lightLimit</label>
+                                <input type="number" id="cfgLightLimit" class="form-control" min="0" max="255" value="255" disabled>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label">校验 xorSum</label>
+                                <input type="text" id="cfgXorSum" class="form-control" value="-" disabled>
+                            </div>
+                        </div>
+                        <div class="row g-2 mt-3">
+                            <div class="col-6"><button id="btnReadCfg" class="btn btn-primary w-100" disabled>读取配置 (0xB4)</button></div>
+                            <div class="col-6"><button id="btnSaveCfg" class="btn btn-success w-100" disabled>保存配置 (0xB6+B5)</button></div>
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-12"><button id="btnSaveAndReboot" class="btn btn-warning w-100" disabled>保存配置并重启设备</button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">设备状态 (ToF / 页 / 编译信息)</div>
+                    <div class="card-body">
+                        <div id="tofContainer">
+                            <div class="tof-bar"><span class="small" style="width:45px">ToF0</span><div class="tof-bar-fill"><div id="tof0bar" class="tof-bar-inner" style="width:0%"></div></div><span id="tof0val" class="small" style="width:55px;text-align:right">-</span></div>
+                            <div class="tof-bar"><span class="small" style="width:45px">ToF1</span><div class="tof-bar-fill"><div id="tof1bar" class="tof-bar-inner" style="width:0%"></div></div><span id="tof1val" class="small" style="width:55px;text-align:right">-</span></div>
+                            <div class="tof-bar"><span class="small" style="width:45px">ToF2</span><div class="tof-bar-fill"><div id="tof2bar" class="tof-bar-inner" style="width:0%"></div></div><span id="tof2val" class="small" style="width:55px;text-align:right">-</span></div>
+                            <div class="tof-bar"><span class="small" style="width:45px">ToF3</span><div class="tof-bar-fill"><div id="tof3bar" class="tof-bar-inner" style="width:0%"></div></div><span id="tof3val" class="small" style="width:55px;text-align:right">-</span></div>
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-6"><button id="btnGetStatus" class="btn btn-primary w-100" disabled>读取状态 (0xB8)</button></div>
+                            <div class="col-6"><button id="btnPollTof" class="btn btn-secondary w-100" disabled>连续 ToF</button></div>
+                        </div>
+                        <pre id="statusLog" class="log-box mt-3">未读取状态</pre>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">运行日志</div>
+            <div class="card-body">
+                <pre id="mainLog" class="log-box">等待连接...</pre>
+                <button id="btnClearLog" class="btn btn-secondary btn-sm mt-2">清空日志</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ====== v1 协议常量 ======
+        const CMD = {
+            GET_API_LEVEL: 0xAF,
+            DEV_DETECT: 0xB0,
+            GET_INPUT: 0xB1,
+            SET_LED: 0xB2,
+            CONFIG_MODE: 0xB3,
+            CFG_READ: 0xB4,
+            CFG_SAVE: 0xB5,
+            CFG_SET: 0xB6,
+            CFG_ERASE: 0xB7,
+            GET_STATUS: 0xB8,
+            EXIT: 0xB9,
+            LOAD3116CONFIG: 0xBA,
+            FLASHING: 0xBB,
+            DETECT: 0xBC
+        };
+
+        const CFG_MAGIC = 0x88;
+        const CFG_VERSION = 0x02;
+        const API_LEVEL = 0x10;
+        const CFG_SIZE = 128;
+
+        const BIT_FORCE16 = 0b00000001;
+        const BIT_MBR3116 = 0b00000010;
+        const BIT_DARKER_GAP = 0b00000100;
+        const BIT_KB_SLIDER = 0b00000001;
+        const BIT_KB_AIR = 0b00000010;
+
+        // ====== 状态 ======
+        let port = null;
+        let reader = null;
+        let writer = null;
+        let readBuffer = new Uint8Array(0);
+        let readLoopRunning = false;
+        let connected = false;
+        let configMode = false;
+        let inputPolling = true;
+        let ledAnimId = null;
+        let tofPollId = null;
+        let lastReadConfig = null;
+
+        let inputFrames = 0;
+        let lastFpsTime = performance.now();
+        let totalPackets = 0;
+        let lastPollTime = 0;
+
+        // ====== DOM 初始化 ======
+        function initUI() {
+            const sliderGrid = document.getElementById("sliderGrid");
+            for (let i = 0; i < 32; i++) {
+                const d = document.createElement("div");
+                d.className = "slider-cell";
+                d.id = "s" + i;
+                d.textContent = i;
+                sliderGrid.appendChild(d);
+            }
+            const airGrid = document.getElementById("airGrid");
+            for (let i = 0; i < 6; i++) {
+                const d = document.createElement("div");
+                d.className = "air-cell";
+                d.id = "a" + i;
+                d.textContent = "A" + (i + 1);
+                airGrid.appendChild(d);
+            }
+            const ledStrip = document.getElementById("ledStrip");
+            for (let i = 0; i < 31; i++) {
+                const d = document.createElement("div");
+                d.className = "led-pixel";
+                d.id = "l" + i;
+                ledStrip.appendChild(d);
+            }
+        }
+        initUI();
+
+        // ====== 日志 ======
+        function log(msg, type = "info") {
+            const box = document.getElementById("mainLog");
+            const t = new Date().toLocaleTimeString("zh-CN", { hour12: false });
+            const line = `[${t}] ${msg}`;
+            box.textContent += (box.textContent ? "\n" : "") + line;
+            box.scrollTop = box.scrollHeight;
+            if (type === "error") console.error(line);
+            else if (type === "warn") console.warn(line);
+            else console.log(line);
+        }
+
+        function statusLog(msg) {
+            const box = document.getElementById("statusLog");
+            box.textContent = msg;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        document.getElementById("btnClearLog").addEventListener("click", () => {
+            document.getElementById("mainLog").textContent = "";
+        });
+
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        // ====== 串口读写 ======
+        async function openPort() {
+            if (!navigator.serial) {
+                alert("当前浏览器不支持 Web Serial API，请使用 Chrome / Edge 并通过 https 或 localhost 访问。");
+                return false;
+            }
+            try {
+                port = await navigator.serial.requestPort({});
+                await port.open({ baudRate: 115200, bufferSize: 8192 });
+                writer = port.writable.getWriter();
+                reader = port.readable.getReader();
+                readBuffer = new Uint8Array(0);
+                readLoopRunning = true;
+                readLoop();
+                connected = true;
+                updateConnectionUI(true);
+                log("串口已打开，波特率 115200");
+                return true;
+            } catch (e) {
+                log("打开串口失败: " + e.message, "error");
+                return false;
+            }
+        }
+
+        async function closePort() {
+            stopLedAnim();
+            stopTofPoll();
+            inputPolling = false;
+            readLoopRunning = false;
+            configMode = false;
+            try { if (reader) await reader.cancel(); } catch (e) {}
+            try { if (writer) await writer.close(); } catch (e) {}
+            try { if (port) await port.close(); } catch (e) {}
+            reader = null;
+            writer = null;
+            port = null;
+            connected = false;
+            updateConnectionUI(false);
+            log("串口已关闭");
+        }
+
+        async function readLoop() {
+            while (readLoopRunning && reader) {
+                try {
+                    const { value, done } = await reader.read();
+                    if (done || !value) break;
+                    const nb = new Uint8Array(readBuffer.length + value.length);
+                    nb.set(readBuffer);
+                    nb.set(value, readBuffer.length);
+                    readBuffer = nb;
+                } catch (e) {
+                    if (readLoopRunning) log("读取错误: " + e.message, "error");
+                    break;
+                }
+            }
+        }
+
+        async function writeBytes(bytes) {
+            if (!writer) throw new Error("未连接");
+            await writer.write(bytes);
+        }
+
+        async function waitForBytes(n, timeout = 1000) {
+            const start = performance.now();
+            while (readBuffer.length < n) {
+                if (performance.now() - start > timeout) throw new Error(`等待 ${n} 字节超时`);
+                await sleep(5);
+            }
+            const out = readBuffer.slice(0, n);
+            readBuffer = readBuffer.slice(n);
+            return out;
+        }
+
+        async function waitForLine(timeout = 1000) {
+            const start = performance.now();
+            while (true) {
+                const idx = readBuffer.indexOf(10);
+                if (idx >= 0) {
+                    const line = readBuffer.slice(0, idx + 1);
+                    readBuffer = readBuffer.slice(idx + 1);
+                    return new TextDecoder().decode(line).replace(/\r?\n$/, "");
+                }
+                if (performance.now() - start > timeout) throw new Error("等待行响应超时");
+                await sleep(5);
+            }
+        }
+
+        async function readAllText(timeout = 400) {
+            await sleep(timeout);
+            const out = readBuffer;
+            readBuffer = new Uint8Array(0);
+            return new TextDecoder().decode(out);
+        }
+
+        function flushReadBuffer() {
+            readBuffer = new Uint8Array(0);
+        }
+
+        // ====== UI 状态 ======
+        function updateConnectionUI(isConnected) {
+            document.getElementById("btnConnect").style.display = isConnected ? "none" : "block";
+            document.getElementById("btnDisconnect").style.display = isConnected ? "block" : "none";
+            document.getElementById("connBadge").className = isConnected ? "badge bg-success" : "badge bg-secondary";
+            document.getElementById("connBadge").textContent = isConnected ? "已连接" : "未连接";
+
+            const ids = ["btnApiLevel", "btnDetect", "btnEnterConfig", "inputToggle", "ledOff", "ledWhite", "ledRed", "ledGreen", "ledBlue", "ledChase", "ledRainbow", "ledStop", "ledCustom", "ledColor", "ledLimit"];
+            ids.forEach(id => document.getElementById(id).disabled = !isConnected);
+
+            updateConfigModeUI();
+        }
+
+        function updateConfigModeUI() {
+            const inCfg = configMode;
+            document.getElementById("modeBadge").className = inCfg ? "badge bg-warning text-dark" : "badge bg-info text-dark";
+            document.getElementById("modeBadge").textContent = inCfg ? "配置模式" : "普通模式";
+            document.getElementById("btnEnterConfig").disabled = !connected || inCfg;
+            document.getElementById("btnExitConfig").disabled = !connected || !inCfg;
+
+            const cfgIds = ["btnReadCfg", "btnSaveCfg", "btnSaveAndReboot", "btnGetStatus", "btnPollTof"];
+            cfgIds.forEach(id => document.getElementById(id).disabled = !connected || !inCfg);
+
+            const inputs = ["cfgHwVer", "cfgForce16", "cfgMbr3116", "cfgDarkerGap", "cfgKbSlider", "cfgKbAir", "cfgThTouch", "cfgThRelease", "cfgDebounce", "cfgAirMax", "cfgAirMin", "cfgOff0", "cfgOff1", "cfgOff2", "cfgOff3", "cfgLightLimit"];
+            inputs.forEach(id => document.getElementById(id).disabled = !inCfg);
+        }
+
+        // ====== 基础命令 ======
+        document.getElementById("btnConnect").addEventListener("click", async () => {
+            if (await openPort()) {
+                inputPolling = true;
+                inputLoop();
+            }
+        });
+        document.getElementById("btnDisconnect").addEventListener("click", closePort);
+
+        document.getElementById("btnApiLevel").addEventListener("click", async () => {
+            try {
+                flushReadBuffer();
+                await writeBytes(new Uint8Array([CMD.GET_API_LEVEL]));
+                const b = await waitForBytes(1, 500);
+                const lvl = b[0];
+                document.getElementById("apiLevelVal").textContent = "0x" + lvl.toString(16).padStart(2, "0");
+                if (lvl === API_LEVEL) {
+                    log("API Level 匹配 v1 固件: 0x" + lvl.toString(16));
+                } else {
+                    log(`警告: 检测到 API Level 0x${lvl.toString(16).padStart(2, "0")}，不是 v1 固件 (0x${API_LEVEL.toString(16)})`, "warn");
+                }
+            } catch (e) { log("读取 API Level 失败: " + e.message, "error"); }
+        });
+
+        document.getElementById("btnDetect").addEventListener("click", async () => {
+            try {
+                flushReadBuffer();
+                await writeBytes(new Uint8Array([CMD.DEV_DETECT]));
+                const b = await waitForBytes(1, 500);
+                const resp = b[0];
+                if (resp === CMD.DEV_DETECT) {
+                    log("设备握手成功 (0xB0)");
+                } else {
+                    log(`设备握手异常，返回 0x${resp.toString(16).padStart(2, "0")}`, "warn");
+                }
+            } catch (e) { log("设备握手失败: " + e.message, "error"); }
+        });
+
+        // ====== 配置模式 ======
+        document.getElementById("btnEnterConfig").addEventListener("click", async () => {
+            try {
+                flushReadBuffer();
+                inputPolling = false;
+                document.getElementById("inputToggle").checked = false;
+                await writeBytes(new Uint8Array([CMD.CONFIG_MODE]));
+                await sleep(200);
+                configMode = true;
+                updateConfigModeUI();
+                log("已进入配置模式 (0xB3)，HID 输入已暂停，正在自动读取配置...");
+                document.getElementById("btnReadCfg").click();
+            } catch (e) { log("进入配置模式失败: " + e.message, "error"); }
+        });
+
+        document.getElementById("btnExitConfig").addEventListener("click", async () => {
+            if (!confirm("退出配置模式将重启设备，是否继续？")) return;
+            try {
+                await writeBytes(new Uint8Array([CMD.EXIT]));
+                log("已发送退出命令 (0xB9)，设备正在重启");
+                configMode = false;
+                await sleep(200);
+                await closePort();
+            } catch (e) { log("退出配置模式失败: " + e.message, "error"); }
+        });
+
+        // ====== 输入测试 ======
+        document.getElementById("inputToggle").addEventListener("change", (e) => {
+            inputPolling = e.target.checked;
+            log(inputPolling ? "已恢复输入轮询" : "已暂停输入轮询");
+        });
+
+        async function inputLoop() {
+            while (connected && inputPolling) {
+                try {
+                    flushReadBuffer();
+                    const t0 = performance.now();
+                    await writeBytes(new Uint8Array([CMD.GET_INPUT]));
+                    const data = await waitForBytes(33, 300);
+                    const dt = performance.now() - t0;
+                    lastPollTime = Math.round(dt);
+                    totalPackets++;
+                    inputFrames++;
+                    updateInputUI(data);
+                    updateMetrics();
+                    await sleep(2);
+                } catch (e) {
+                    await sleep(50);
+                }
+            }
+        }
+
+        function updateInputUI(data) {
+            let activeSlider = [];
+            for (let i = 0; i < 32; i++) {
+                const v = data[i];
+                const el = document.getElementById("s" + i);
+                const on = v > 0;
+                el.classList.toggle("active", on);
+                el.style.opacity = on ? (0.3 + v / 255 * 0.7) : 1;
+                if (on) activeSlider.push(i);
+            }
+            document.getElementById("sliderSummary").textContent = activeSlider.length ? activeSlider.join(", ") : "无输入";
+
+            let activeAir = [];
+            const air = data[32];
+            for (let i = 0; i < 6; i++) {
+                const on = (air & (1 << i)) !== 0;
+                document.getElementById("a" + i).classList.toggle("active", on);
+                if (on) activeAir.push(i + 1);
+            }
+            document.getElementById("airSummary").textContent = activeAir.length ? "A" + activeAir.join(", A") : "无输入";
+        }
+
+        function updateMetrics() {
+            const now = performance.now();
+            if (now - lastFpsTime >= 1000) {
+                document.getElementById("fpsVal").textContent = inputFrames;
+                inputFrames = 0;
+                lastFpsTime = now;
+            }
+            document.getElementById("pollVal").textContent = lastPollTime + "ms";
+            document.getElementById("pktVal").textContent = totalPackets;
+        }
+
+        // ====== 配置打包 / 解析 ======
+        function packConfig() {
+            const base = lastReadConfig && lastReadConfig.length === CFG_SIZE ? lastReadConfig.slice() : new Uint8Array(CFG_SIZE);
+            const buf = base;
+            buf[0] = CFG_MAGIC;
+            buf[1] = CFG_VERSION;
+            buf[2] = parseInt(document.getElementById("cfgHwVer").value);
+
+            let cfg0 = 0;
+            if (document.getElementById("cfgForce16").checked) cfg0 |= BIT_FORCE16;
+            if (document.getElementById("cfgMbr3116").checked) cfg0 |= BIT_MBR3116;
+            if (document.getElementById("cfgDarkerGap").checked) cfg0 |= BIT_DARKER_GAP;
+            buf[3] = cfg0;
+
+            let cfg1 = 0;
+            if (document.getElementById("cfgKbSlider").checked) cfg1 |= BIT_KB_SLIDER;
+            if (document.getElementById("cfgKbAir").checked) cfg1 |= BIT_KB_AIR;
+            buf[4] = cfg1;
+
+            buf[7] = parseInt(document.getElementById("cfgThTouch").value) || 0;
+            buf[8] = parseInt(document.getElementById("cfgThRelease").value) || 0;
+            buf[9] = parseInt(document.getElementById("cfgDebounce").value) || 0;
+
+            const airMax = parseInt(document.getElementById("cfgAirMax").value) || 0;
+            const airMin = parseInt(document.getElementById("cfgAirMin").value) || 0;
+            buf[10] = airMax & 0xFF;
+            buf[11] = (airMax >> 8) & 0xFF;
+            buf[12] = airMin & 0xFF;
+            buf[13] = (airMin >> 8) & 0xFF;
+
+            for (let i = 0; i < 4; i++) {
+                const v = parseInt(document.getElementById("cfgOff" + i).value) || 0;
+                const u16 = v < 0 ? v + 65536 : v;
+                buf[14 + i * 2] = u16 & 0xFF;
+                buf[15 + i * 2] = (u16 >> 8) & 0xFF;
+            }
+            // heightOffset[4] reserved
+            buf[24] = parseInt(document.getElementById("cfgLightLimit").value) || 0;
+
+            // reserved 25..126 already zero
+            buf[127] = calcXorSum(buf);
+            return buf;
+        }
+
+        function unpackConfig(buf) {
+            if (buf.length !== CFG_SIZE) throw new Error("配置长度错误: " + buf.length);
+            if (buf[0] !== CFG_MAGIC) throw new Error("Magic 不匹配: 0x" + buf[0].toString(16));
+            if (buf[1] !== CFG_VERSION) throw new Error("cfgVer 不匹配: 0x" + buf[1].toString(16));
+
+            lastReadConfig = buf.slice();
+            document.getElementById("cfgHwVer").value = buf[2];
+            document.getElementById("cfgVer").value = "0x" + buf[1].toString(16).padStart(2, "0");
+            document.getElementById("cfgForce16").checked = !!(buf[3] & BIT_FORCE16);
+            document.getElementById("cfgMbr3116").checked = !!(buf[3] & BIT_MBR3116);
+            document.getElementById("cfgDarkerGap").checked = !!(buf[3] & BIT_DARKER_GAP);
+            document.getElementById("cfgKbSlider").checked = !!(buf[4] & BIT_KB_SLIDER);
+            document.getElementById("cfgKbAir").checked = !!(buf[4] & BIT_KB_AIR);
+            document.getElementById("cfgThTouch").value = buf[7];
+            document.getElementById("cfgThRelease").value = buf[8];
+            document.getElementById("cfgDebounce").value = buf[9];
+            document.getElementById("cfgAirMax").value = buf[10] | (buf[11] << 8);
+            document.getElementById("cfgAirMin").value = buf[12] | (buf[13] << 8);
+            for (let i = 0; i < 4; i++) {
+                const lo = buf[14 + i * 2], hi = buf[15 + i * 2];
+                let v = lo | (hi << 8);
+                if (v >= 32768) v -= 65536;
+                document.getElementById("cfgOff" + i).value = v;
+            }
+            document.getElementById("cfgLightLimit").value = buf[24];
+            document.getElementById("cfgXorSum").value = "0x" + buf[127].toString(16).padStart(2, "0");
+        }
+
+        function calcXorSum(buf) {
+            let s = 0;
+            for (let i = 0; i < CFG_SIZE - 1; i++) s ^= buf[i];
+            return s;
+        }
+
+        document.getElementById("btnReadCfg").addEventListener("click", async () => {
+            if (!configMode) { log("请先进入配置模式", "warn"); return; }
+            try {
+                flushReadBuffer();
+                await writeBytes(new Uint8Array([CMD.CFG_READ]));
+                const cfg = await waitForBytes(CFG_SIZE, 800);
+                const line1 = await waitForLine(500);
+                const line2 = await waitForLine(500);
+                unpackConfig(cfg);
+                log(`配置读取成功: ${line1} | ${line2}`);
+            } catch (e) { log("读取配置失败: " + e.message, "error"); }
+        });
+
+        async function doSaveConfig() {
+            const cfg = packConfig();
+            const localXor = calcXorSum(cfg);
+            if (localXor !== cfg[127]) {
+                log("配置校验和异常: xorSum=0x" + localXor.toString(16).padStart(2, "0") + ", buf[127]=0x" + cfg[127].toString(16).padStart(2, "0"), "error");
+                return false;
+            }
+            flushReadBuffer();
+            const pkt = new Uint8Array(1 + CFG_SIZE);
+            pkt[0] = CMD.CFG_SET;
+            pkt.set(cfg, 1);
+            await writeBytes(pkt);
+            const line = await waitForLine(1000);
+            log("CFG_SET 响应: " + line);
+            if (!line.includes("check ok")) {
+                await sleep(20);
+                while (readBuffer.length > 0) {
+                    const extra = await waitForLine(200);
+                    log("CFG_SET 额外输出: " + extra);
+                }
+                return false;
+            }
+            await sleep(50);
+            await writeBytes(new Uint8Array([CMD.CFG_SAVE]));
+            const saveLine = await waitForLine(2000);
+            log("配置已保存: " + saveLine);
+            return true;
+        }
+
+        document.getElementById("btnSaveCfg").addEventListener("click", async () => {
+            if (!configMode) { log("请先进入配置模式", "warn"); return; }
+            try {
+                await doSaveConfig();
+            } catch (e) { log("保存配置失败: " + e.message, "error"); }
+        });
+
+        document.getElementById("btnSaveAndReboot").addEventListener("click", async () => {
+            if (!configMode) { log("请先进入配置模式", "warn"); return; }
+            try {
+                const ok = await doSaveConfig();
+                if (!ok) {
+                    log("保存未成功，取消重启", "warn");
+                    return;
+                }
+                await sleep(100);
+                await writeBytes(new Uint8Array([CMD.EXIT]));
+                log("已保存并发送重启命令，设备正在重启");
+                configMode = false;
+                await sleep(200);
+                await closePort();
+            } catch (e) { log("保存并重启失败: " + e.message, "error"); }
+        });
+
+        // ====== 状态查询 ======
+        // ====== 状态查询 ======
+        document.getElementById("btnGetStatus").addEventListener("click", async () => {
+            if (!configMode) { log("请先进入配置模式", "warn"); return; }
+            try {
+                flushReadBuffer();
+                await writeBytes(new Uint8Array([CMD.GET_STATUS]));
+                await waitForLine(500); // "get status..."
+                const text = await readAllText(500);
+                statusLog(text || "无状态输出");
+                parseTofFromStatus(text);
+                log("状态读取完成");
+            } catch (e) { log("读取状态失败: " + e.message, "error"); }
+        });
+
+        function parseTofFromStatus(text) {
+            const m = text.match(/tof0\s*=\s*(-?\d+)\s+tof1\s*=\s*(-?\d+)\s+tof2\s*=\s*(-?\d+)\s+tof3\s*=\s*(-?\d+)/);
+            if (!m) return;
+            const vals = [parseInt(m[1]), parseInt(m[2]), parseInt(m[3]), parseInt(m[4])];
+            const max = 2000;
+            for (let i = 0; i < 4; i++) {
+                const v = vals[i];
+                document.getElementById("tof" + i + "val").textContent = v;
+                const pct = Math.max(0, Math.min(100, v / max * 100));
+                document.getElementById("tof" + i + "bar").style.width = pct + "%";
+            }
+        }
+
+        document.getElementById("btnPollTof").addEventListener("click", () => {
+            if (tofPollId) { stopTofPoll(); return; }
+            if (!configMode) { log("请先进入配置模式", "warn"); return; }
+            document.getElementById("btnPollTof").textContent = "停止 ToF";
+            tofPollId = setInterval(() => document.getElementById("btnGetStatus").click(), 250);
+            log("开始连续 ToF 读取 (250ms)");
+        });
+
+        function stopTofPoll() {
+            if (tofPollId) { clearInterval(tofPollId); tofPollId = null; }
+            const btn = document.getElementById("btnPollTof");
+            if (btn) btn.textContent = "连续 ToF";
+        }
+
+        // ====== 灯光测试 ======
+        function setLedPreview(colors) {
+            for (let i = 0; i < 31; i++) {
+                const [r, g, b] = colors[i] || [0, 0, 0];
+                document.getElementById("l" + i).style.background = `rgb(${r},${g},${b})`;
+                document.getElementById("l" + i).style.boxShadow = (r || g || b) ? `0 0 8px rgb(${r},${g},${b})` : "none";
+            }
+        }
+
+        function buildLedPacket(colors) {
+            const limit = parseInt(document.getElementById("ledLimit").value) || 255;
+            const pkt = new Uint8Array(97);
+            pkt[0] = CMD.SET_LED;
+            for (let i = 0; i < 31; i++) {
+                let [r, g, b] = colors[i] || [0, 0, 0];
+                r = Math.round(r * limit / 255);
+                g = Math.round(g * limit / 255);
+                b = Math.round(b * limit / 255);
+                pkt[1 + i * 3 + 0] = b;
+                pkt[1 + i * 3 + 1] = r;
+                pkt[1 + i * 3 + 2] = g;
+            }
+            return pkt;
+        }
+
+        async function sendLedColors(colors) {
+            if (!connected) return;
+            try {
+                await writeBytes(buildLedPacket(colors));
+                setLedPreview(colors);
+            } catch (e) { log("发送灯光失败: " + e.message, "error"); }
+        }
+
+        function hexToRgb(hex) {
+            const n = parseInt(hex.slice(1), 16);
+            return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+        }
+
+        function solidColors(r, g, b) {
+            return Array(31).fill([r, g, b]);
+        }
+
+        document.getElementById("ledOff").addEventListener("click", () => { stopLedAnim(); sendLedColors(solidColors(0, 0, 0)); });
+        document.getElementById("ledWhite").addEventListener("click", () => { stopLedAnim(); sendLedColors(solidColors(255, 255, 255)); });
+        document.getElementById("ledRed").addEventListener("click", () => { stopLedAnim(); sendLedColors(solidColors(255, 0, 0)); });
+        document.getElementById("ledGreen").addEventListener("click", () => { stopLedAnim(); sendLedColors(solidColors(0, 255, 0)); });
+        document.getElementById("ledBlue").addEventListener("click", () => { stopLedAnim(); sendLedColors(solidColors(0, 0, 255)); });
+        document.getElementById("ledCustom").addEventListener("click", () => { stopLedAnim(); sendLedColors(solidColors(...hexToRgb(document.getElementById("ledColor").value))); });
+        document.getElementById("ledColor").addEventListener("input", () => { if (!ledAnimId) sendLedColors(solidColors(...hexToRgb(document.getElementById("ledColor").value))); });
+        document.getElementById("ledLimit").addEventListener("input", () => { if (!ledAnimId) sendLedColors(solidColors(...hexToRgb(document.getElementById("ledColor").value))); });
+
+        document.getElementById("ledChase").addEventListener("click", () => {
+            stopLedAnim();
+            const rgb = hexToRgb(document.getElementById("ledColor").value);
+            let pos = 0;
+            const speed = parseInt(document.getElementById("ledSpeed").value) || 50;
+            let last = performance.now();
+            let fpsCount = 0, fpsLast = performance.now();
+            const step = () => {
+                if (!ledAnimId) return;
+                const now = performance.now();
+                if (now - last < speed) { ledAnimId = requestAnimationFrame(step); return; }
+                last = now;
+                const colors = Array(31).fill([0, 0, 0]);
+                for (let i = 0; i < 31; i++) {
+                    const d = Math.abs(i - pos);
+                    if (d < 4) colors[i] = [rgb[0] >> d, rgb[1] >> d, rgb[2] >> d];
+                }
+                sendLedColors(colors);
+                pos = (pos + 1) % 31;
+                fpsCount++;
+                if (now - fpsLast >= 1000) {
+                    document.getElementById("ledFps").textContent = "FPS: " + fpsCount;
+                    fpsCount = 0;
+                    fpsLast = now;
+                }
+                ledAnimId = requestAnimationFrame(step);
+            };
+            ledAnimId = requestAnimationFrame(step);
+        });
+
+        document.getElementById("ledRainbow").addEventListener("click", () => {
+            stopLedAnim();
+            let offset = 0;
+            const speed = parseInt(document.getElementById("ledSpeed").value) || 50;
+            let last = performance.now();
+            let fpsCount = 0, fpsLast = performance.now();
+            const step = () => {
+                if (!ledAnimId) return;
+                const now = performance.now();
+                if (now - last < speed) { ledAnimId = requestAnimationFrame(step); return; }
+                last = now;
+                const colors = [];
+                for (let i = 0; i < 31; i++) {
+                    const h = (offset + i * 8) % 360;
+                    colors.push(hslToRgb(h / 360, 1, 0.5));
+                }
+                sendLedColors(colors);
+                offset = (offset + 4) % 360;
+                fpsCount++;
+                if (now - fpsLast >= 1000) {
+                    document.getElementById("ledFps").textContent = "FPS: " + fpsCount;
+                    fpsCount = 0;
+                    fpsLast = now;
+                }
+                ledAnimId = requestAnimationFrame(step);
+            };
+            ledAnimId = requestAnimationFrame(step);
+        });
+
+        document.getElementById("ledStop").addEventListener("click", () => {
+            stopLedAnim();
+            sendLedColors(solidColors(0, 0, 0));
+        });
+
+        function stopLedAnim() {
+            if (ledAnimId) { cancelAnimationFrame(ledAnimId); ledAnimId = null; }
+        }
+
+        function hslToRgb(h, s, l) {
+            let r, g, b;
+            if (s === 0) { r = g = b = l; } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1 / 3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1 / 3);
+            }
+            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+        }
+
+        window.addEventListener("beforeunload", () => { if (connected) closePort(); });
+        window.addEventListener("beforeunload", () => { if (connected) closePort(); });
+    </script>
+</body>
+
+</html>

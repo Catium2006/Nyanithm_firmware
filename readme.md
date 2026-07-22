@@ -17,5 +17,3 @@
 [vl53l0x-arduino](https://github.com/pololu/vl53l0x-arduino)
 
 [CypressCY8CMBR3116](https://github.com/sebastianregelmann/CypressCY8CMBR3116)
-
-[Pico_WS2812](https://github.com/ForsakenNGS/Pico_WS2812)

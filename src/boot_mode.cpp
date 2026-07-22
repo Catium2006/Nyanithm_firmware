@@ -47,7 +47,7 @@ void boot_normalMode() {
 }
 
 void boot_flashing() {
-    led_controller.fill(WS2812::RGB(100, 0, 0));
-    led_controller.show();
+    led_controller.fill(100, 0, 0);
+    led_controller.flush();
     rom_reset_usb_boot(0, 0);
 }

@@ -1,6 +1,6 @@
 #ifndef __HW_DEVICES_H__
 #define __HW_DEVICES_H__
-#include <WS2812.hpp>
+#include <ws2812.h>
 #include <cy8cmbr3116.h>
 #include <cy8cmbr3116_cfg.h>
 #include <gpio_def.h>

@@ -65,18 +65,16 @@ void update_rainbow_frame() {
             uint8_t hue = (i * 256 / 31 + offset) & 0xFF; // 0-255 循环
             RGB rgb = hsv_to_rgb(hue);
             if((i % 2 == 0) && (touchData32[31 - i] || touchData32[31 - i - 1])) {
-                led_controller.setPixelColor(
-                    i, WS2812::RGB(ControllerConfig.lightLimit, ControllerConfig.lightLimit,
-                                   ControllerConfig.lightLimit));
+                led_controller.setColor(i, ControllerConfig.lightLimit, ControllerConfig.lightLimit,
+                                        ControllerConfig.lightLimit);
 
             } else {
-                led_controller.setPixelColor(
-                    i, WS2812::RGB((rgb.r * ControllerConfig.lightLimit) / 255,
-                                   (rgb.g * ControllerConfig.lightLimit) / 255,
-                                   (rgb.b * ControllerConfig.lightLimit) / 255));
+                led_controller.setColor(i, (rgb.r * ControllerConfig.lightLimit) / 255,
+                                        (rgb.g * ControllerConfig.lightLimit) / 255,
+                                        (rgb.b * ControllerConfig.lightLimit) / 255);
             }
         }
-        led_controller.show();
+        led_controller.flush();
 
         offset++; // 改变偏移量，形成流动
     } else {

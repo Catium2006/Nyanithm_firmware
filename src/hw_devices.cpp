@@ -1,5 +1,6 @@
 #include <controller_config.h>
 #include <hw_devices.h>
+#include <pico/stdlib.h>
 #include <tca9539.h>
 
 VL53L0X tof0(1, 0x29);
@@ -8,15 +9,15 @@ VL53L0X tof2(1, 0x29);
 VL53L0X tof3(1, 0x29);
 VL53L0X tof4(1, 0x29);
 
-CY8CMBR3116 MBR3116D(0,0x43);
-CY8CMBR3116 MBR3116E(0,0x44);
+CY8CMBR3116 MBR3116D(0, 0x43);
+CY8CMBR3116 MBR3116E(0, 0x44);
 
 CY8CMBR3116 *p3116l, *p3116r;
 
 PCA954X mux0(1, 0x70, GPIO_PCA9545_RESET);
 
-WS2812 led_controller(GPIO_LED_CONTROLLER, 31, pio0, 0, WS2812::FORMAT_GRB);
-WS2812 led_internal(GPIO_LED_INTERNAL, 1, pio0, WS2812::FORMAT_GRB);
+WS2812 led_controller(pio0, 0, GPIO_LED_CONTROLLER, 31);
+WS2812 led_internal(pio0, 1, GPIO_LED_INTERNAL, 1);
 
 TCA9539 iox0(1, 0x74);
 
@@ -155,25 +156,25 @@ void program_cy8cmbr3116_custom(uint8_t addr, uint8_t* cfg) {
 
 void init3116() {
     // 等待状态白光
-    led_internal.fill(WS2812::RGB(0x40, 0x40, 0x40));
-    led_internal.show();
+    led_internal.fill(0x40, 0x40, 0x40);
+    led_internal.flush();
     while(1) {
         if(detect3116(0x43) && detect3116(0x44)) {
-            led_internal.fill(WS2812::RGB(0x00, 0x00, 0xff));
-            led_internal.show();
+            led_internal.fill(0x00, 0x00, 0xff);
+            led_internal.flush();
             break;
         } else if(detect3116(0x43)) {
             if(detect3116(0x37)) {
                 program_cy8cmbr3116_custom(0x37, cy8cmbr3116_cfg_0x44);
             } else {
-                led_internal.fill(WS2812::RGB(0, 0xff, 0));
-                led_internal.show();
+                led_internal.fill(0, 0xff, 0);
+                led_internal.flush();
             }
         } else if(detect3116(0x37)) {
             program_cy8cmbr3116_custom(0x37, cy8cmbr3116_cfg_0x43);
         } else {
-            led_internal.fill(WS2812::RGB(0xff, 0, 0));
-            led_internal.show();
+            led_internal.fill(0xff, 0, 0);
+            led_internal.flush();
         }
         sleep_ms(200);
     }

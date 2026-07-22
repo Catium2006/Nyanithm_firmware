@@ -98,9 +98,9 @@ void lamp_array_apply(void) {
         }
 
         // Keep physical LED indexing consistent with existing firmware mapping.
-        led_controller.setPixelColor(30 - i, WS2812::RGB(r, g, b));
+        led_controller.setColor(30 - i, r, g, b);
     }
-    led_controller.show();
+    led_controller.flush();
     s_dirty = false;
 }
 

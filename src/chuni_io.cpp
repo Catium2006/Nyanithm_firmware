@@ -152,9 +152,9 @@ void maindev_loop() {
                     g >>= 2;
                     b >>= 2;
                 }
-                led_controller.setPixelColor(30 - i, WS2812::RGB(r, g, b));
+                led_controller.setColor(30 - i, r, g, b);
             }
-            led_controller.show();
+            led_controller.flush();
         } else if(cmd == CMD_FLASHING) {
             boot_flashing();
         } else if(cmd == CMD_CFG_ERASE) {

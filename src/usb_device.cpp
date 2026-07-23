@@ -36,7 +36,7 @@
 #include <pico/multicore.h>
 #include <pico/stdio/driver.h>
 
-#include <chuni_io.h>
+#include <serial_io.h>
 #include <controller_config.h>
 #include <hw_devices.h>
 #include <lamp_array.h>

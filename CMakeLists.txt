@@ -44,7 +44,7 @@ add_executable(Nyanithm
         src/vl53l0x.cpp
         src/controller_config.cpp
         src/hw_devices.cpp
-        src/chuni_io.cpp
+        src/serial_io.cpp
         src/boot_mode.cpp
         src/cy8cmbr3116.cpp
         src/rainbow.cpp

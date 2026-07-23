@@ -5,19 +5,17 @@
  * Copyright (c) 2026 Catium2006
  */
 
-#ifndef __BOOT_MODE_H__
-#define __BOOT_MODE_H__
+#ifndef __CHUNI_IO_H__
+#define __CHUNI_IO_H__
 
-void boot_normalMode();
+#include <stdint-gcc.h>
+#include <nyanithm_shared.h>
 
-void reboot();
+void serial_io();
 
-void boot_switch();
+void hid_task_chuni_input();
 
-void boot_flashing();
-
-void start_4kMode();
-
-void start_6kMode();
+extern bool game_connected;
+extern bool hid_working ;
 
 #endif

@@ -1,4 +1,11 @@
-/* VIBE CODING */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * Copyright (c) 2026 Catium2006
+ */
+
+
 
 #include <lamp_array.h>
 
@@ -6,7 +13,7 @@
 #include <hw_devices.h>
 #include <string.h>
 
-#include <chuni_io.h>
+#include <serial_io.h>
 
 static constexpr uint16_t kLampCount = 31;
 static constexpr uint8_t kMaxMultiUpdateLamps = 8;

@@ -1,8 +1,15 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * Copyright (c) 2026 Catium2006
+ */
+
 #include <controller_config.h>
 #include <hw_devices.h>
 #include <tusb.h>
 #include <usb_device.h>
-#include <chuni_io.h>
+#include <serial_io.h>
 
 void start_4kMode() {
 
@@ -10,7 +17,7 @@ void start_4kMode() {
 
         updateInputState();
         updateTouchData4k();
-        maindev_loop();
+        serial_io();
         led_controller.fill(0x08, 0x08, 0x08);
         led_controller.setColor(7, ControllerConfig.lightLimit, 0, ControllerConfig.lightLimit);
         led_controller.setColor(15, ControllerConfig.lightLimit, 0, ControllerConfig.lightLimit);
@@ -88,7 +95,7 @@ void start_6kMode() {
     while (true) {
         updateInputState();
         updateTouchData6k();
-        maindev_loop();
+        serial_io();
         led_controller.fill(0, 0, 0);
 
         led_controller.setColor(2, 25, 0, 0);
